@@ -1675,7 +1675,7 @@ function saveSahmkKey() {
 async function _sahmkFetch(symbol) {
   if (!sahmkApiKey) return null;
   try {
-    const r = await fetch(`https://app.sahmk.sa/api/v1/quote/${symbol}/`, {
+   const r = await fetch(`https://corsproxy.io/?https://app.sahmk.sa/api/v1/quote/${symbol}/`, {
       headers: { 'X-API-Key': sahmkApiKey, 'Accept': 'application/json' },
       signal: AbortSignal.timeout(12000)
     });
@@ -1710,7 +1710,7 @@ async function testSahmkConnection() {
   st.textContent = '⏳ جارٍ الاختبار...';
 
   try {
-    const r = await fetch('https://app.sahmk.sa/api/v1/quote/2222/', {
+    const r = await fetch('https://corsproxy.io/?https://app.sahmk.sa/api/v1/quote/2222/', {
       headers: { 'X-API-Key': key },
       signal: AbortSignal.timeout(12000)
     });
