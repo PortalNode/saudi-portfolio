@@ -1,0 +1,2887 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>محفظتي | تاسي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base:      #0d1018;
+      --bg-primary:   #131720;
+      --bg-card:      #192030;
+      --bg-elevated:  #1f2840;
+      --bg-input:     #111825;
+      --accent:       #e8a020;
+      --accent-dim:   #b87d18;
+      --accent-glow:  rgba(232,160,32,0.18);
+      --green:        #22c97a;
+      --green-dim:    rgba(34,201,122,0.15);
+      --red:          #f0505a;
+      --red-dim:      rgba(240,80,90,0.15);
+      --blue:         #4e9df0;
+      --blue-dim:     rgba(78,157,240,0.15);
+      --text-1:       #dde3f0;
+      --text-2:       #7f8aaa;
+      --text-3:       #3d4760;
+      --border:       #1e2840;
+      --border-light: #283450;
+      --shadow-dark:  rgba(5,8,16,0.8);
+      --shadow-light: rgba(35,48,80,0.5);
+      --radius:       16px;
+      --radius-sm:    10px;
+      --radius-lg:    24px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Tajawal',sans-serif;
+      background:var(--bg-base);
+      color:var(--text-1);
+      min-height:100vh;
+      direction:rtl;
+      overflow-x:hidden;
+    }
+    /* ===== SCROLLBAR ===== */
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-track{background:var(--bg-primary)}
+    ::-webkit-scrollbar-thumb{background:var(--bg-elevated);border-radius:10px}
+
+    /* ===== UTILITY ===== */
+    .text-green{color:var(--green)}
+    .text-red{color:var(--red)}
+    .text-accent{color:var(--accent)}
+    .text-muted{color:var(--text-2)}
+    .text-dim{color:var(--text-3)}
+    .text-sm{font-size:0.82rem}
+    .text-xs{font-size:0.72rem}
+    .font-bold{font-weight:700}
+    .font-800{font-weight:800}
+    .hidden{display:none!important}
+    .flex{display:flex}
+    .flex-col{flex-direction:column}
+    .items-center{align-items:center}
+    .justify-between{justify-content:space-between}
+    .justify-center{justify-content:center}
+    .gap-2{gap:0.5rem}
+    .gap-3{gap:0.75rem}
+    .gap-4{gap:1rem}
+    .w-full{width:100%}
+    .mt-1{margin-top:0.25rem}
+    .mt-2{margin-top:0.5rem}
+    .mt-3{margin-top:0.75rem}
+    .mt-4{margin-top:1rem}
+    .mb-1{margin-bottom:0.25rem}
+    .mb-2{margin-bottom:0.5rem}
+    .mb-3{margin-bottom:0.75rem}
+
+    /* ===== SOFT-UI CARD ===== */
+    .card{
+      background:var(--bg-card);
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      box-shadow:
+        6px 6px 18px var(--shadow-dark),
+        -3px -3px 10px var(--shadow-light),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      padding:1.25rem;
+    }
+    .card-lg{
+      background:var(--bg-card);
+      border-radius:var(--radius-lg);
+      border:1px solid var(--border);
+      box-shadow:
+        8px 8px 24px var(--shadow-dark),
+        -4px -4px 14px var(--shadow-light),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    /* ===== HEADER ===== */
+    header{
+      background:var(--bg-primary);
+      border-bottom:1px solid var(--border);
+      padding:0 1.5rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      height:64px;
+      position:sticky;top:0;z-index:100;
+      box-shadow:0 4px 20px rgba(0,0,0,0.4);
+    }
+    .logo{
+      display:flex;align-items:center;gap:0.6rem;
+      font-size:1.2rem;font-weight:800;
+      color:var(--text-1);
+    }
+    .logo-icon{
+      width:36px;height:36px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-dim));
+      border-radius:10px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      box-shadow:0 4px 12px var(--accent-glow);
+    }
+    .logo span{color:var(--accent)}
+
+    /* ===== NAV TABS ===== */
+    nav{
+      display:flex;gap:0.25rem;
+      background:var(--bg-input);
+      padding:0.3rem;
+      border-radius:var(--radius-sm);
+      border:1px solid var(--border);
+    }
+    .nav-btn{
+      padding:0.45rem 0.9rem;
+      border:none;background:transparent;
+      color:var(--text-2);
+      font-family:'Tajawal',sans-serif;
+      font-size:0.88rem;font-weight:500;
+      cursor:pointer;
+      border-radius:7px;
+      transition:all 0.2s;
+      white-space:nowrap;
+    }
+    .nav-btn:hover{color:var(--text-1);background:var(--bg-elevated)}
+    .nav-btn.active{
+      background:var(--bg-elevated);
+      color:var(--accent);font-weight:700;
+      box-shadow:2px 2px 8px var(--shadow-dark),inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    /* ===== HEADER ACTIONS ===== */
+    .header-actions{display:flex;align-items:center;gap:0.6rem}
+    .btn-icon{
+      width:36px;height:36px;
+      border:1px solid var(--border-light);
+      background:var(--bg-elevated);
+      border-radius:9px;
+      display:flex;align-items:center;justify-content:center;
+      cursor:pointer;color:var(--text-2);font-size:1rem;
+      transition:all 0.2s;
+    }
+    .btn-icon:hover{color:var(--accent);border-color:var(--accent)}
+
+    /* ===== MAIN LAYOUT ===== */
+    main{padding:1.5rem;max-width:1300px;margin:0 auto}
+
+    /* ===== TAB CONTENT ===== */
+    .tab-content{display:none}
+    .tab-content.active{display:block;animation:fadeIn 0.3s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ===== DASHBOARD GRID ===== */
+    .dash-grid{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1rem;margin-bottom:1rem;
+    }
+    @media(max-width:900px){.dash-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:500px){.dash-grid{grid-template-columns:1fr}}
+
+    .stat-card{
+      background:var(--bg-card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      padding:1.25rem;
+      box-shadow:6px 6px 18px var(--shadow-dark),-3px -3px 10px var(--shadow-light),inset 0 1px 0 rgba(255,255,255,0.04);
+      position:relative;overflow:hidden;
+    }
+    .stat-card::before{
+      content:'';position:absolute;top:0;right:0;
+      width:60px;height:60px;
+      border-radius:50%;
+      opacity:0.07;
+      filter:blur(20px);
+    }
+    .stat-card.gold::before{background:var(--accent)}
+    .stat-card.green::before{background:var(--green)}
+    .stat-card.red::before{background:var(--red)}
+    .stat-card.blue::before{background:var(--blue)}
+    .stat-label{font-size:0.78rem;color:var(--text-2);font-weight:500;margin-bottom:0.4rem}
+    .stat-value{font-size:1.5rem;font-weight:800;line-height:1.2}
+    .stat-sub{font-size:0.75rem;color:var(--text-2);margin-top:0.3rem}
+    .stat-icon{
+      position:absolute;left:1rem;top:50%;transform:translateY(-50%);
+      font-size:1.6rem;opacity:0.15;
+    }
+
+    /* ===== SECTION HEADER ===== */
+    .section-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:1rem;
+    }
+    .section-title{font-size:1rem;font-weight:700;color:var(--text-1)}
+    .section-title span{color:var(--accent)}
+
+    /* ===== BUTTONS ===== */
+    .btn{
+      display:inline-flex;align-items:center;gap:0.4rem;
+      padding:0.55rem 1.1rem;
+      border:none;border-radius:var(--radius-sm);
+      font-family:'Tajawal',sans-serif;
+      font-size:0.85rem;font-weight:600;
+      cursor:pointer;transition:all 0.2s;
+      white-space:nowrap;
+    }
+    .btn-primary{
+      background:linear-gradient(135deg,var(--accent),var(--accent-dim));
+      color:#0d1018;
+      box-shadow:0 4px 14px var(--accent-glow);
+    }
+    .btn-primary:hover{transform:translateY(-1px);box-shadow:0 6px 20px var(--accent-glow)}
+    .btn-ghost{
+      background:var(--bg-elevated);color:var(--text-2);
+      border:1px solid var(--border-light);
+    }
+    .btn-ghost:hover{color:var(--text-1);border-color:var(--text-3)}
+    .btn-green{background:var(--green-dim);color:var(--green);border:1px solid rgba(34,201,122,0.3)}
+    .btn-red{background:var(--red-dim);color:var(--red);border:1px solid rgba(240,80,90,0.3)}
+    .btn-blue{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(78,157,240,0.3)}
+    .btn-sm{padding:0.35rem 0.7rem;font-size:0.78rem;border-radius:7px}
+
+    /* ===== TABLE ===== */
+    .table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
+    table{width:100%;border-collapse:collapse;font-size:0.87rem}
+    thead tr{background:var(--bg-elevated)}
+    th{
+      padding:0.8rem 1rem;text-align:right;
+      color:var(--text-2);font-weight:600;font-size:0.78rem;
+      white-space:nowrap;border-bottom:1px solid var(--border);
+    }
+    td{
+      padding:0.8rem 1rem;
+      border-bottom:1px solid var(--border);
+      vertical-align:middle;white-space:nowrap;
+    }
+    tbody tr{background:var(--bg-card);transition:background 0.15s}
+    tbody tr:last-child td{border-bottom:none}
+    tbody tr:hover{background:var(--bg-elevated)}
+    .symbol-badge{
+      display:inline-flex;align-items:center;justify-content:center;
+      min-width:52px;height:28px;padding:0 8px;
+      background:var(--bg-elevated);
+      border:1px solid var(--border-light);
+      border-radius:7px;
+      font-size:0.78rem;font-weight:700;
+      color:var(--accent);letter-spacing:0.5px;
+    }
+    .stock-name{color:var(--text-1);font-weight:500;font-size:0.85rem}
+    .stock-sector{color:var(--text-3);font-size:0.72rem}
+
+    /* ===== PRICE BADGE ===== */
+    .price-up{color:var(--green)}
+    .price-down{color:var(--red)}
+    .price-neutral{color:var(--text-2)}
+    .change-badge{
+      display:inline-flex;align-items:center;gap:3px;
+      padding:2px 7px;border-radius:5px;
+      font-size:0.76rem;font-weight:700;
+    }
+    .change-badge.up{background:var(--green-dim);color:var(--green)}
+    .change-badge.down{background:var(--red-dim);color:var(--red)}
+    .change-badge.neutral{background:rgba(127,138,170,0.12);color:var(--text-2)}
+
+    /* ===== MODAL ===== */
+    .modal-overlay{
+      position:fixed;inset:0;z-index:500;
+      background:rgba(5,8,16,0.85);
+      backdrop-filter:blur(6px);
+      display:none;align-items:center;justify-content:center;
+      padding:1rem;
+    }
+    .modal-overlay.open{display:flex}
+    .modal{
+      background:var(--bg-card);
+      border:1px solid var(--border-light);
+      border-radius:var(--radius-lg);
+      padding:1.75rem;
+      width:100%;max-width:500px;
+      max-height:90vh;overflow-y:auto;
+      box-shadow:0 24px 60px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.06);
+      animation:slideUp 0.25s ease;
+    }
+    @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .modal-header{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:1.25rem;padding-bottom:1rem;
+      border-bottom:1px solid var(--border);
+    }
+    .modal-title{font-size:1.05rem;font-weight:700}
+    .modal-close{
+      width:30px;height:30px;border:none;
+      background:var(--bg-elevated);
+      color:var(--text-2);border-radius:7px;
+      cursor:pointer;font-size:1rem;
+      display:flex;align-items:center;justify-content:center;
+      transition:all 0.2s;
+    }
+    .modal-close:hover{color:var(--red);background:var(--red-dim)}
+
+    /* ===== FORM ===== */
+    .form-group{margin-bottom:1rem}
+    .form-label{
+      display:block;font-size:0.8rem;font-weight:600;
+      color:var(--text-2);margin-bottom:0.4rem;
+    }
+    .form-control{
+      width:100%;padding:0.7rem 0.9rem;
+      background:var(--bg-input);
+      border:1px solid var(--border-light);
+      border-radius:var(--radius-sm);
+      color:var(--text-1);
+      font-family:'Tajawal',sans-serif;font-size:0.88rem;
+      outline:none;transition:border-color 0.2s;
+      direction:rtl;
+    }
+    .form-control:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-glow)}
+    .form-control::placeholder{color:var(--text-3)}
+    select.form-control option{background:var(--bg-elevated);color:var(--text-1)}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem}
+    .form-hint{font-size:0.73rem;color:var(--text-3);margin-top:0.3rem}
+
+    /* ===== STOCK LOOKUP ===== */
+    .stock-lookup-result{
+      padding:0.5rem 0.9rem;
+      background:var(--bg-elevated);
+      border:1px solid var(--accent);
+      border-radius:var(--radius-sm);
+      margin-top:0.4rem;
+      font-size:0.85rem;font-weight:600;
+      color:var(--accent);
+      display:none;
+    }
+    .stock-lookup-result.show{display:block}
+
+    /* ===== TOAST ===== */
+    .toast-container{
+      position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+      z-index:1000;display:flex;flex-direction:column;gap:0.5rem;
+      pointer-events:none;
+    }
+    .toast{
+      background:var(--bg-elevated);
+      border:1px solid var(--border-light);
+      border-radius:var(--radius-sm);
+      padding:0.7rem 1.2rem;
+      font-size:0.85rem;font-weight:500;
+      box-shadow:0 8px 24px rgba(0,0,0,0.5);
+      animation:toastIn 0.3s ease;
+      white-space:nowrap;
+    }
+    .toast.success{border-color:rgba(34,201,122,0.4);color:var(--green)}
+    .toast.error{border-color:rgba(240,80,90,0.4);color:var(--red)}
+    .toast.info{border-color:rgba(232,160,32,0.4);color:var(--accent)}
+    @keyframes toastIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ===== BADGE ===== */
+    .badge{
+      display:inline-flex;align-items:center;
+      padding:2px 8px;border-radius:5px;
+      font-size:0.72rem;font-weight:700;
+    }
+    .badge-green{background:var(--green-dim);color:var(--green)}
+    .badge-red{background:var(--red-dim);color:var(--red)}
+    .badge-blue{background:var(--blue-dim);color:var(--blue)}
+    .badge-gold{background:var(--accent-glow);color:var(--accent)}
+
+    /* ===== DIVIDER ===== */
+    .divider{height:1px;background:var(--border);margin:1rem 0}
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state{
+      text-align:center;padding:3rem 1rem;
+      color:var(--text-3);
+    }
+    .empty-state .icon{font-size:3rem;margin-bottom:0.75rem;opacity:0.4}
+    .empty-state p{font-size:0.9rem;color:var(--text-2);margin-bottom:1rem}
+
+    /* ===== REFRESH SPINNER ===== */
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{animation:spin 1s linear infinite;display:inline-block}
+
+    /* ===== PROGRESS BAR ===== */
+    .progress-bar{
+      height:6px;background:var(--bg-elevated);border-radius:3px;overflow:hidden;
+    }
+    .progress-fill{height:100%;border-radius:3px;transition:width 0.4s ease}
+
+    /* ===== ALLOCATION ROW ===== */
+    .alloc-row{margin-bottom:0.7rem}
+    .alloc-label{
+      display:flex;justify-content:space-between;
+      font-size:0.8rem;margin-bottom:0.3rem;
+    }
+
+    /* ===== SETTINGS CARD ===== */
+    .setting-item{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1rem;
+      background:var(--bg-elevated);
+      border-radius:var(--radius-sm);
+      border:1px solid var(--border);
+      margin-bottom:0.6rem;
+    }
+    .setting-info .label{font-size:0.88rem;font-weight:600}
+    .setting-info .desc{font-size:0.75rem;color:var(--text-2);margin-top:0.15rem}
+
+    /* ===== TOGGLE ===== */
+    .toggle{position:relative;width:44px;height:24px;cursor:pointer}
+    .toggle input{opacity:0;width:0;height:0}
+    .toggle-slider{
+      position:absolute;inset:0;
+      background:var(--bg-input);border:1px solid var(--border-light);
+      border-radius:12px;transition:0.3s;
+    }
+    .toggle-slider::before{
+      content:'';position:absolute;
+      width:18px;height:18px;left:2px;bottom:2px;
+      background:var(--text-3);border-radius:50%;transition:0.3s;
+    }
+    .toggle input:checked + .toggle-slider{background:var(--accent-glow);border-color:var(--accent)}
+    .toggle input:checked + .toggle-slider::before{transform:translateX(20px);background:var(--accent)}
+
+    /* ===== TABS WITHIN PAGE ===== */
+    .inner-tabs{display:flex;gap:0.5rem;margin-bottom:1rem}
+    .inner-tab{
+      padding:0.4rem 0.9rem;border:1px solid var(--border);
+      border-radius:var(--radius-sm);background:var(--bg-elevated);
+      color:var(--text-2);font-family:'Tajawal',sans-serif;
+      font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;
+    }
+    .inner-tab.active{background:var(--bg-card);color:var(--accent);border-color:var(--accent)}
+
+    /* ===== CASH BAR ===== */
+    .cash-bar{
+      display:flex;align-items:center;gap:0.6rem;
+      background:var(--bg-elevated);
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      padding:0.5rem 0.9rem;
+      font-size:0.82rem;
+    }
+    .cash-bar .cash-label{color:var(--text-2)}
+    .cash-bar .cash-val{color:var(--accent);font-weight:700}
+
+    /* price loading skeleton */
+    .skeleton{
+      display:inline-block;background:var(--bg-elevated);
+      border-radius:4px;animation:pulse 1.5s infinite;
+    }
+    @keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
+
+    /* ===== TRANSACTION TYPE CHIPS ===== */
+    .tx-chip{
+      display:inline-flex;align-items:center;gap:4px;
+      padding:3px 9px;border-radius:6px;font-size:0.75rem;font-weight:700;
+    }
+    .tx-buy{background:var(--green-dim);color:var(--green)}
+    .tx-sell{background:var(--red-dim);color:var(--red)}
+    .tx-dividend{background:var(--accent-glow);color:var(--accent)}
+    .tx-reinvest{background:var(--blue-dim);color:var(--blue)}
+
+    /* ===== RESPONSIVE ===== */
+    @media(max-width:768px){
+      header{padding:0 0.75rem}
+      nav .nav-btn{padding:0.4rem 0.6rem;font-size:0.78rem}
+      main{padding:0.75rem}
+      .form-row{grid-template-columns:1fr}
+      th,td{padding:0.6rem 0.7rem}
+    }
+    @media(max-width:480px){
+      .logo-text{display:none}
+    }
+
+    /* ===== HEADER CASH PILL ===== */
+    .cash-pill{
+      display:flex;align-items:center;gap:0.4rem;
+      background:var(--bg-elevated);
+      border:1px solid var(--border-light);
+      border-radius:20px;padding:0.3rem 0.8rem;
+      font-size:0.82rem;cursor:pointer;
+      transition:all 0.2s;
+    }
+    .cash-pill:hover{border-color:var(--accent)}
+    .cash-pill .label{color:var(--text-2)}
+    .cash-pill .val{color:var(--accent);font-weight:700}
+
+    /* ===== PORTFOLIO SUMMARY ===== */
+    .portfolio-summary{
+      background:linear-gradient(135deg,rgba(232,160,32,0.08),rgba(78,157,240,0.04));
+      border:1px solid rgba(232,160,32,0.2);
+      border-radius:var(--radius-lg);
+      padding:1.5rem;
+      margin-bottom:1.25rem;
+      display:grid;
+      grid-template-columns:2fr 1fr 1fr 1fr;
+      gap:1rem;
+    }
+    @media(max-width:800px){.portfolio-summary{grid-template-columns:1fr 1fr}}
+    @media(max-width:500px){.portfolio-summary{grid-template-columns:1fr}}
+    .ps-main .label{font-size:0.8rem;color:var(--text-2);margin-bottom:0.3rem}
+    .ps-main .value{font-size:2rem;font-weight:900;color:var(--text-1)}
+    .ps-main .sub{font-size:0.8rem;margin-top:0.2rem}
+    .ps-item .label{font-size:0.75rem;color:var(--text-2);margin-bottom:0.2rem}
+    .ps-item .value{font-size:1.1rem;font-weight:700}
+
+    /* Animated number counter */
+    .animated-num{transition:color 0.5s}
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">📈</div>
+    <span class="logo-text">محفظتي <span>تاسي</span></span>
+  </div>
+
+  <nav>
+    <button class="nav-btn active" onclick="switchTab('dashboard')">لوحة التحكم</button>
+    <button class="nav-btn" onclick="switchTab('portfolio')">محفظتي</button>
+    <button class="nav-btn" onclick="switchTab('transactions')">العمليات</button>
+    <button class="nav-btn" onclick="switchTab('dividends')">التوزيعات</button>
+    <button class="nav-btn" onclick="switchTab('settings')">الإعدادات</button>
+  </nav>
+
+  <div class="header-actions">
+    <div class="cash-pill" onclick="openCashModal()">
+      <span class="label">💵 كاش:</span>
+      <span class="val" id="header-cash">0.00</span>
+      <span class="label">ر.س</span>
+    </div>
+    <div class="btn-icon" onclick="refreshAllPrices()" title="تحديث الأسعار">
+      <span id="refresh-icon">⟳</span>
+    </div>
+    <div class="btn-icon" onclick="openAddModal()" title="إضافة سهم">+</div>
+    <div class="btn-icon" onclick="openAddModal()" title="إضافة سهم">+</div>
+  </div>
+</header>
+
+<!-- ========== MAIN ========== -->
+<main>
+
+  <!-- ===== TAB: DASHBOARD ===== -->
+  <div class="tab-content active" id="tab-dashboard">
+
+    <!-- ══ Row 1: 4 KPI cards ══ -->
+    <div class="dash-grid" id="dash-cards">
+
+      <div class="stat-card gold">
+        <div class="stat-label">إجمالي المحفظة (أسهم + كاش)</div>
+        <div class="stat-value text-accent" id="total-portfolio">0.00</div>
+        <div class="stat-sub text-muted" id="total-invested">مستثمر: 0.00 ر.س</div>
+        <div class="stat-icon">💼</div>
+      </div>
+
+      <div class="stat-card" id="pnl-card">
+        <div class="stat-label">الربح / الخسارة الإجمالي</div>
+        <div class="stat-value" id="total-pnl">0.00</div>
+        <div class="stat-sub" id="total-pnl-pct">0.00%</div>
+        <div class="stat-icon">📊</div>
+      </div>
+
+      <div class="stat-card blue">
+        <div class="stat-label">الكاش المتاح</div>
+        <div class="stat-value text-blue" id="dash-cash">0.00</div>
+        <div class="stat-sub text-muted" id="dash-cash-pct">0% من الإجمالي</div>
+        <div class="stat-icon">💵</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">التوزيعات المحصلة</div>
+        <div class="stat-value text-accent" id="total-dividends">0.00</div>
+        <div class="stat-sub text-muted">ر.س إجمالي</div>
+        <div class="stat-icon">🏦</div>
+      </div>
+    </div>
+
+    <!-- ══ Row 2: توزيع الأصول — full width ══ -->
+    <div class="card" style="padding:1rem 1.25rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:1.5rem;flex-wrap:wrap">
+      <div style="font-size:0.78rem;color:var(--text-2);font-weight:600;white-space:nowrap">توزيع الأصول</div>
+
+      <!-- Bar -->
+      <div style="flex:1;min-width:120px">
+        <div id="asset-split-bar" style="height:10px;border-radius:5px;overflow:hidden;background:var(--bg-elevated);display:flex"></div>
+      </div>
+
+      <!-- Stocks pill -->
+      <div style="display:flex;align-items:center;gap:0.5rem;background:rgba(78,157,240,0.1);border:1px solid rgba(78,157,240,0.2);border-radius:8px;padding:0.4rem 0.75rem">
+        <span style="width:8px;height:8px;border-radius:2px;background:#4e9df0;display:inline-block;flex-shrink:0"></span>
+        <div>
+          <div style="font-size:0.7rem;color:var(--text-2)">قيمة الأسهم</div>
+          <div style="font-size:0.88rem;font-weight:700;color:#4e9df0;direction:ltr" id="stocks-value-sm">0.00</div>
+        </div>
+        <div style="font-size:1rem;font-weight:800;color:#4e9df0;margin-right:0.25rem" id="stocks-pct">0%</div>
+      </div>
+
+      <!-- Cash pill -->
+      <div style="display:flex;align-items:center;gap:0.5rem;background:rgba(232,160,32,0.1);border:1px solid rgba(232,160,32,0.2);border-radius:8px;padding:0.4rem 0.75rem">
+        <span style="width:8px;height:8px;border-radius:2px;background:#e8a020;display:inline-block;flex-shrink:0"></span>
+        <div>
+          <div style="font-size:0.7rem;color:var(--text-2)">الكاش</div>
+          <div style="font-size:0.88rem;font-weight:700;color:#e8a020;direction:ltr" id="cash-value-sm">0.00</div>
+        </div>
+        <div style="font-size:1rem;font-weight:800;color:#e8a020;margin-right:0.25rem" id="cash-pct-bar">0%</div>
+      </div>
+    </div>
+
+    <!-- ══ Row 3: Holdings table + Allocation ══ -->
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:1rem" id="dash-body">
+      <div>
+        <div class="section-header">
+          <div class="section-title">أبرز الأسهم <span>في محفظتك</span></div>
+          <button class="btn btn-ghost btn-sm" onclick="switchTab('portfolio')">عرض الكل</button>
+        </div>
+        <div class="table-wrap" id="top-holdings-wrap">
+          <div class="empty-state">
+            <div class="icon">📋</div>
+            <p>لا توجد أسهم في محفظتك بعد</p>
+            <button class="btn btn-primary" onclick="openAddModal()">+ إضافة سهم</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-header" style="margin-bottom:0.6rem">
+          <div class="section-title">توزيع <span>المحفظة</span></div>
+          <div style="display:flex;gap:0.3rem">
+            <button id="alloc-tab-sector" class="inner-tab active" onclick="setAllocTab('sector')">القطاعات</button>
+            <button id="alloc-tab-stock"  class="inner-tab"        onclick="setAllocTab('stock')">الأسهم</button>
+          </div>
+        </div>
+        <div class="card" id="allocation-card" style="padding:1rem">
+          <div id="allocation-list">
+            <div class="empty-state" style="padding:1.5rem">
+              <p>أضف أسهماً لرؤية التوزيع</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: PORTFOLIO ===== -->
+  <div class="tab-content" id="tab-portfolio">
+    <div class="section-header">
+      <div class="section-title">محفظتي <span>الاستثمارية</span></div>
+      <div style="display:flex;gap:0.5rem">
+        <button class="btn btn-ghost btn-sm" onclick="refreshAllPrices()">⟳ تحديث الأسعار</button>
+        <button class="btn btn-primary btn-sm" onclick="openAddModal()">+ إضافة سهم</button>
+      </div>
+    </div>
+
+    <div class="table-wrap" id="portfolio-table-wrap">
+      <div class="empty-state">
+        <div class="icon">💼</div>
+        <p>محفظتك فارغة حتى الآن</p>
+        <button class="btn btn-primary" onclick="openAddModal()">+ أضف سهمك الأول</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: TRANSACTIONS ===== -->
+  <div class="tab-content" id="tab-transactions">
+    <div class="section-header">
+      <div class="section-title">سجل <span>العمليات</span></div>
+      <div style="display:flex;gap:0.5rem;align-items:center">
+        <select class="form-control" id="tx-filter-type" style="width:auto;padding:0.4rem 0.7rem;font-size:0.82rem" onchange="renderTransactions()">
+          <option value="">كل العمليات</option>
+          <option value="buy">شراء</option>
+          <option value="sell">بيع</option>
+          <option value="dividend">توزيع</option>
+          <option value="reinvest">إعادة استثمار</option>
+        </select>
+        <select class="form-control" id="tx-filter-sym" style="width:auto;padding:0.4rem 0.7rem;font-size:0.82rem" onchange="renderTransactions()">
+          <option value="">كل الأسهم</option>
+        </select>
+      </div>
+    </div>
+    <div class="table-wrap" id="tx-table-wrap">
+      <div class="empty-state">
+        <div class="icon">📒</div>
+        <p>لا توجد عمليات مسجلة</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: DIVIDENDS ===== -->
+  <div class="tab-content" id="tab-dividends">
+    <div class="section-header">
+      <div class="section-title">إدارة <span>التوزيعات النقدية</span></div>
+      <button class="btn btn-primary btn-sm" onclick="openDividendModal()">+ تسجيل توزيع</button>
+    </div>
+    <div class="table-wrap" id="div-table-wrap">
+      <div class="empty-state">
+        <div class="icon">🏦</div>
+        <p>لا توجد توزيعات مسجلة</p>
+        <button class="btn btn-primary" onclick="openDividendModal()">+ سجّل أول توزيع</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB: SETTINGS ===== -->
+  <div class="tab-content" id="tab-settings">
+    <div class="section-title mb-3">⚙️ الإعدادات والبيانات</div>
+
+    <!-- ════ SAHMK API Setup ════ -->
+    <div class="card mb-3" style="border-color:rgba(34,201,122,0.25)">
+      <div class="section-title mb-3" style="color:var(--green)">
+        📈 مصدر الأسعار — SAHMK API
+        <span style="font-size:0.7rem;background:var(--green-dim);color:var(--green);padding:2px 8px;border-radius:5px;margin-right:6px">السوق السعودي الرسمي</span>
+      </div>
+      <div style="background:var(--bg-elevated);border-radius:var(--radius-sm);border:1px solid var(--border);padding:1rem;margin-bottom:1rem;font-size:0.82rem;line-height:1.9;color:var(--text-2)">
+        <div style="font-weight:700;color:var(--text-1);margin-bottom:0.5rem">🚀 خطوات الإعداد (مرة واحدة فقط):</div>
+        <div><span style="color:var(--accent);font-weight:700">1</span> — افتح <a href="https://sahmk.sa" target="_blank" style="color:var(--blue)">sahmk.sa</a> وأنشئ حساباً مجانياً</div>
+        <div><span style="color:var(--accent);font-weight:700">2</span> — اذهب إلى Dashboard وانسخ مفتاح API الخاص بك</div>
+        <div><span style="color:var(--accent);font-weight:700">3</span> — الصق المفتاح أدناه ← اضغط <strong style="color:var(--text-1)">حفظ</strong> ← ثم <strong style="color:var(--text-1)">اختبار</strong></div>
+        <div style="margin-top:0.5rem;padding:0.5rem 0.75rem;background:rgba(78,157,240,0.08);border-radius:6px;border:1px solid rgba(78,157,240,0.2)">
+          💡 الخطة المجانية: 100 طلب/يوم — تكفي لتحديث محفظتك عدة مرات يومياً
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom:0.75rem">
+        <label class="form-label">مفتاح API من sahmk.sa</label>
+        <div style="display:flex;gap:0.5rem">
+          <input type="password" class="form-control" id="sahmk-api-key-input"
+            placeholder="shmk_live_xxxxxxxxxxxxxxxx"
+            style="direction:ltr;text-align:left;flex:1;letter-spacing:0.05em">
+          <button class="btn btn-green" onclick="saveSahmkKey()">💾 حفظ</button>
+          <button class="btn btn-ghost" onclick="testSahmkConnection()">🔗 اختبار</button>
+        </div>
+        <p class="form-hint mt-1">المفتاح يبدأ بـ <span style="color:var(--accent);font-family:monospace">shmk_live_</span> أو <span style="color:var(--accent);font-family:monospace">shmk_test_</span></p>
+      </div>
+      <div id="sahmk-status" style="display:none;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.82rem;margin-top:0.5rem"></div>
+      <div class="divider"></div>
+      <button class="btn btn-primary" onclick="refreshAllPrices()" style="width:100%">⟳ تحديث الأسعار الآن</button>
+    </div>
+
+        <!-- ════ Cash Management ════ -->
+    <div class="card mb-3">
+      <div class="section-title mb-3">💵 إدارة الكاش</div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">الرصيد الكاش الحالي (ر.س)</label>
+          <input type="number" class="form-control" id="cash-input" placeholder="0.00" step="0.01">
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <button class="btn btn-primary w-full" onclick="saveCash()">حفظ الرصيد</button>
+        </div>
+      </div>
+      <p class="form-hint mt-2">سيتم تعديل الرصيد تلقائياً عند تسجيل عمليات الشراء والبيع إذا فعّلت الخيار أدناه</p>
+      <div class="divider"></div>
+      <div class="setting-item" style="margin-bottom:0">
+        <div class="setting-info">
+          <div class="label">تعديل الكاش تلقائياً عند الشراء/البيع</div>
+          <div class="desc">خصم/إضافة قيمة الصفقة من رصيد الكاش</div>
+        </div>
+        <label class="toggle"><input type="checkbox" id="auto-cash-toggle" onchange="saveSettings()"><span class="toggle-slider"></span></label>
+      </div>
+    </div>
+
+    <!-- ════ Export / Import ════ -->
+    <div class="card mb-3">
+      <div class="section-title mb-3">📦 تصدير واستيراد البيانات</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem">
+        <div>
+          <button class="btn btn-ghost w-full" onclick="exportData()">⬇️ تصدير JSON</button>
+          <p class="form-hint mt-1">تصدير كافة بياناتك ومحفظتك كملف JSON</p>
+        </div>
+        <div>
+          <label class="btn btn-ghost w-full" style="cursor:pointer;justify-content:center">
+            ⬆️ استيراد JSON
+            <input type="file" accept=".json" onchange="importData(event)" style="display:none">
+          </label>
+          <p class="form-hint mt-1">استيراد بيانات محفوظة مسبقاً</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ════ Danger Zone ════ -->
+    <div class="card" style="border-color:rgba(240,80,90,0.2)">
+      <div class="section-title mb-3" style="color:var(--red)">⚠️ منطقة الخطر</div>
+      <button class="btn btn-red" onclick="clearAllData()">🗑️ مسح كافة البيانات</button>
+      <p class="form-hint mt-2" style="color:rgba(240,80,90,0.6)">هذا الإجراء لا يمكن التراجع عنه. سيتم حذف جميع الأسهم والعمليات والتوزيعات.</p>
+    </div>
+  </div>
+
+</main>
+
+<!-- ===== TOAST CONTAINER ===== -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ===== MODAL: ADD/BUY STOCK ===== -->
+<div class="modal-overlay" id="modal-add">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-add-title">إضافة / شراء سهم</div>
+      <button class="modal-close" onclick="closeModal('modal-add')">✕</button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">رمز السهم</label>
+      <input type="text" class="form-control" id="add-symbol" placeholder="مثال: 2222" maxlength="8" oninput="lookupSymbol(this.value)" style="direction:ltr;text-align:right">
+      <div class="stock-lookup-result" id="symbol-lookup-result"></div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">عدد الأسهم</label>
+        <input type="number" class="form-control" id="add-shares" placeholder="100" min="1" step="1" oninput="calcAddTotal()">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">سعر الشراء (ر.س)</label>
+        <input type="number" class="form-control" id="add-price" placeholder="0.00" min="0" step="0.01" oninput="calcAddTotal()">
+      </div>
+    </div>
+
+    <div class="form-row mt-2">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">تاريخ الشراء</label>
+        <input type="date" class="form-control" id="add-date">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">العمولة (ر.س) - اختياري</label>
+        <input type="number" class="form-control" id="add-commission" placeholder="0.00" min="0" step="0.01" oninput="calcAddTotal()">
+      </div>
+    </div>
+
+    <div class="form-group mt-2">
+      <label class="form-label">ملاحظة - اختياري</label>
+      <input type="text" class="form-control" id="add-note" placeholder="أي ملاحظة...">
+    </div>
+
+    <div class="card mt-2" style="padding:0.8rem;background:var(--bg-elevated)">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-2)">
+        <span>إجمالي التكلفة</span>
+        <span class="text-accent font-bold" id="add-total-cost">0.00 ر.س</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-2);margin-top:0.3rem" id="avg-cost-row">
+        <span>متوسط التكلفة بعد الشراء</span>
+        <span class="text-accent font-bold" id="add-avg-cost">-</span>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.6rem;margin-top:1.25rem">
+      <button class="btn btn-primary w-full" onclick="confirmAddStock()">✔ تأكيد الشراء</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-add')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: SELL STOCK ===== -->
+<div class="modal-overlay" id="modal-sell">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">بيع أسهم</div>
+      <button class="modal-close" onclick="closeModal('modal-sell')">✕</button>
+    </div>
+    <div class="card mb-3" style="padding:0.8rem;background:var(--bg-elevated)">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+        <span class="text-muted">الأسهم المتاحة:</span>
+        <span class="text-accent font-bold" id="sell-available">0</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-top:0.25rem">
+        <span class="text-muted">متوسط التكلفة:</span>
+        <span id="sell-avg">0.00 ر.س</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">عدد الأسهم للبيع</label>
+        <input type="number" class="form-control" id="sell-shares" placeholder="0" min="1" oninput="calcSellTotal()">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">سعر البيع (ر.س)</label>
+        <input type="number" class="form-control" id="sell-price" placeholder="0.00" min="0" step="0.01" oninput="calcSellTotal()">
+      </div>
+    </div>
+    <div class="form-row mt-2">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">تاريخ البيع</label>
+        <input type="date" class="form-control" id="sell-date">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">العمولة (ر.س)</label>
+        <input type="number" class="form-control" id="sell-commission" placeholder="0.00" step="0.01">
+      </div>
+    </div>
+    <div class="form-group mt-2">
+      <label class="form-label">ملاحظة</label>
+      <input type="text" class="form-control" id="sell-note" placeholder="...">
+    </div>
+    <div class="card mt-2" style="padding:0.8rem;background:var(--bg-elevated)">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:var(--text-2)">
+        <span>صافي العائد</span>
+        <span class="font-bold" id="sell-net">0.00 ر.س</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-top:0.3rem">
+        <span class="text-muted">الربح / الخسارة</span>
+        <span class="font-bold" id="sell-pnl">0.00 ر.س</span>
+      </div>
+    </div>
+    <input type="hidden" id="sell-symbol">
+    <div style="display:flex;gap:0.6rem;margin-top:1.25rem">
+      <button class="btn btn-red w-full" onclick="confirmSell()">✔ تأكيد البيع</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-sell')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: DIVIDEND ===== -->
+<div class="modal-overlay" id="modal-dividend">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">تسجيل توزيع نقدي</div>
+      <button class="modal-close" onclick="closeModal('modal-dividend')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">السهم</label>
+      <select class="form-control" id="div-symbol" onchange="updateDivInfo()">
+        <option value="">-- اختر السهم --</option>
+      </select>
+    </div>
+    <div class="card mb-3" id="div-stock-info" style="display:none;padding:0.8rem;background:var(--bg-elevated)">
+      <div style="font-size:0.82rem;color:var(--text-2)">
+        الأسهم المملوكة: <span class="text-accent font-bold" id="div-owned">0</span> &nbsp;|&nbsp;
+        تاريخ الشراء الأول: <span id="div-first-date">-</span>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">توزيع للسهم الواحد (ر.س)</label>
+        <input type="number" class="form-control" id="div-per-share" placeholder="0.00" step="0.01" oninput="calcDivTotal()">
+      </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">تاريخ الاستحقاق (Ex-Date)</label>
+        <input type="date" class="form-control" id="div-exdate" onchange="calcDivTotal()">
+      </div>
+    </div>
+    <div class="form-group mt-2">
+      <label class="form-label">تاريخ استلام التوزيع</label>
+      <input type="date" class="form-control" id="div-paydate">
+    </div>
+
+    <div class="card mt-2" id="div-calc-card" style="display:none;padding:0.8rem;background:var(--bg-elevated)">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem">
+        <span class="text-muted">الأسهم المؤهلة</span>
+        <span class="font-bold" id="div-eligible">0</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-top:0.3rem">
+        <span class="text-muted">إجمالي التوزيع</span>
+        <span class="text-accent font-bold" id="div-total">0.00 ر.س</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="setting-item" style="margin-bottom:0.75rem">
+      <div class="setting-info">
+        <div class="label">إعادة استثمار التوزيعات</div>
+        <div class="desc">شراء أسهم إضافية بقيمة التوزيع</div>
+      </div>
+      <label class="toggle"><input type="checkbox" id="div-reinvest" onchange="toggleReinvestFields()"><span class="toggle-slider"></span></label>
+    </div>
+
+    <div id="reinvest-fields" class="hidden">
+      <div class="form-group">
+        <label class="form-label">سعر إعادة الاستثمار (ر.س)</label>
+        <input type="number" class="form-control" id="div-reinvest-price" placeholder="0.00" step="0.01" oninput="calcReinvest()">
+        <p class="form-hint">سيتم احتساب عدد الأسهم المضافة وتحديث متوسط التكلفة</p>
+      </div>
+      <div class="card" id="reinvest-result" style="display:none;padding:0.8rem;background:var(--bg-elevated);font-size:0.82rem">
+        <div style="display:flex;justify-content:space-between">
+          <span class="text-muted">أسهم مضافة</span>
+          <span class="text-green font-bold" id="ri-shares">0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;margin-top:0.3rem">
+          <span class="text-muted">متوسط التكلفة الجديد</span>
+          <span class="text-accent font-bold" id="ri-new-avg">-</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.6rem;margin-top:1.25rem">
+      <button class="btn btn-primary w-full" onclick="confirmDividend()">✔ تأكيد التوزيع</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-dividend')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: CASH ===== -->
+<div class="modal-overlay" id="modal-cash">
+  <div class="modal" style="max-width:380px">
+    <div class="modal-header">
+      <div class="modal-title">💵 تعديل الكاش</div>
+      <button class="modal-close" onclick="closeModal('modal-cash')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">الرصيد الجديد (ر.س)</label>
+      <input type="number" class="form-control" id="modal-cash-input" placeholder="0.00" step="0.01">
+    </div>
+    <div style="display:flex;gap:0.6rem">
+      <button class="btn btn-primary w-full" onclick="saveModalCash()">حفظ</button>
+      <button class="btn btn-ghost" onclick="closeModal('modal-cash')">إلغاء</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL: STOCK HISTORY ===== -->
+<div class="modal-overlay" id="modal-history">
+  <div class="modal" style="max-width:650px">
+    <div class="modal-header">
+      <div class="modal-title" id="history-title">تفاصيل السهم</div>
+      <button class="modal-close" onclick="closeModal('modal-history')">✕</button>
+    </div>
+    <div id="history-content"></div>
+  </div>
+</div>
+
+<script>
+// ========================================================
+//  SAUDI STOCKS DATABASE — بيانات رسمية كاملة
+// ========================================================
+const SAUDI_STOCKS = {
+  "1010":"الرياض",
+  "1020":"الجزيرة",
+  "1030":"الإستثمار",
+  "1050":"بي اس اف",
+  "1060":"الأول",
+  "1080":"العربي",
+  "1111":"مجموعة تداول",
+  "1120":"الراجحي",
+  "1140":"البلاد",
+  "1150":"الإنماء",
+  "1180":"الأهلي",
+  "1182":"أملاك",
+  "1183":"سهل",
+  "1201":"تكوين",
+  "1202":"مبكو",
+  "1210":"بي سي آي",
+  "1211":"معادن",
+  "1212":"أسترا الصناعية",
+  "1213":"نسيج",
+  "1214":"شاكر",
+  "1301":"أسلاك",
+  "1302":"بوان",
+  "1303":"الصناعات الكهربائية",
+  "1304":"اليمامة للحديد",
+  "1320":"أنابيب السعودية",
+  "1321":"أنابيب الشرق",
+  "1322":"أماك",
+  "1323":"يو سي آي سي",
+  "1324":"صالح الراشد",
+  "1810":"سيرا",
+  "1820":"بان",
+  "1830":"لجام للرياضة",
+  "1831":"مهارة",
+  "1832":"صدر",
+  "1833":"الموارد",
+  "1834":"سماسكو",
+  "1835":"تمكين",
+  "2001":"كيمانول",
+  "2010":"سابك",
+  "2020":"سابك للمغذيات الزراعية",
+  "2030":"المصافي",
+  "2040":"الخزف السعودي",
+  "2050":"مجموعة صافولا",
+  "2060":"التصنيع",
+  "2070":"الدوائية",
+  "2080":"الغاز",
+  "2081":"الخريف",
+  "2082":"أكوا",
+  "2083":"مرافق",
+  "2084":"مياهنا",
+  "2090":"جبسكو",
+  "2100":"وفرة",
+  "2110":"الكابلات السعودية",
+  "2120":"متطورة",
+  "2130":"صدق",
+  "2140":"أيان",
+  "2150":"زجاج",
+  "2160":"أميانتيت",
+  "2170":"اللجين",
+  "2180":"فيبكو",
+  "2190":"سيسكو القابضة",
+  "2200":"أنابيب",
+  "2210":"نماء للكيماويات",
+  "2220":"معدنية",
+  "2222":"أرامكو السعودية",
+  "2223":"لوبريف",
+  "2230":"الكيميائية",
+  "2240":"صناعات",
+  "2250":"المجموعة السعودية",
+  "2270":"سدافكو",
+  "2280":"المراعي",
+  "2281":"تنمية",
+  "2282":"نقي",
+  "2283":"المطاحن الأولى",
+  "2284":"المطاحن الحديثة",
+  "2285":"المطاحن العربية",
+  "2286":"المطاحن الرابعة",
+  "2287":"إنتاج",
+  "2288":"نفوذ",
+  "2290":"ينساب",
+  "2300":"صناعة الورق",
+  "2310":"سبكيم العالمية",
+  "2320":"البابطين",
+  "2330":"المتقدمة",
+  "2340":"ارتيكس",
+  "2350":"كيان السعودية",
+  "2360":"الفخارية",
+  "2370":"مسك",
+  "2380":"بترو رابغ",
+  "2381":"الحفر العربية",
+  "2382":"أديس",
+  "3002":"أسمنت نجران",
+  "3003":"أسمنت المدينة",
+  "3004":"أسمنت الشمالية",
+  "3005":"أسمنت ام القرى",
+  "3007":"الواحة",
+  "3008":"الكثيري",
+  "3010":"أسمنت العربية",
+  "3020":"أسمنت اليمامة",
+  "3030":"أسمنت السعودية",
+  "3040":"أسمنت القصيم",
+  "3050":"أسمنت الجنوب",
+  "3060":"أسمنت ينبع",
+  "3080":"أسمنت الشرقية",
+  "3090":"أسمنت تبوك",
+  "3091":"أسمنت الجوف",
+  "3092":"أسمنت الرياض",
+  "4001":"أسواق ع العثيم",
+  "4002":"المواساة",
+  "4003":"إكسترا",
+  "4004":"دله الصحية",
+  "4005":"رعاية",
+  "4006":"أسواق المزرعة",
+  "4007":"الحمادي",
+  "4008":"ساكو",
+  "4009":"السعودي الألماني الصحية",
+  "4011":"لازوردي",
+  "4012":"الأصيل",
+  "4013":"سليمان الحبيب",
+  "4014":"دار المعدات",
+  "4015":"جمجوم فارما",
+  "4016":"أفالون فارما",
+  "4017":"فقيه الطبية",
+  "4018":"الموسى",
+  "4019":"اس ام سي للرعاية الصحية",
+  "4020":"العقارية",
+  "4021":"المركز الكندي الطبي",
+  "4030":"البحري",
+  "4031":"الخدمات الأرضية",
+  "4040":"سابتكو",
+  "4050":"ساسكو",
+  "4051":"باعظيم",
+  "4061":"أنعام القابضة",
+  "4070":"تهامة",
+  "4071":"العربية",
+  "4072":"مجموعة إم بي سي",
+  "4080":"سناد القابضة",
+  "4081":"النايفات",
+  "4082":"مرنة",
+  "4083":"تسهيل",
+  "4084":"دراية",
+  "4090":"طيبة",
+  "4100":"مكة",
+  "4110":"باتك",
+  "4130":"درب السعودية",
+  "4140":"صادرات",
+  "4141":"العمران",
+  "4142":"كابلات الرياض",
+  "4143":"تالكو",
+  "4144":"رؤوم",
+  "4145":"أو جي سي",
+  "4146":"جاز",
+  "4147":"سي جي إس",
+  "4148":"الوسائل الصناعية",
+  "4150":"التعمير",
+  "4160":"ثمار",
+  "4161":"بن داود",
+  "4162":"المنجم",
+  "4163":"الدواء",
+  "4164":"النهدي",
+  "4165":"الماجد للعود",
+  "4170":"شمس",
+  "4180":"مجموعة فتيحي",
+  "4190":"جرير",
+  "4191":"أبو معطي",
+  "4192":"السيف غاليري",
+  "4193":"نايس ون",
+  "4194":"محطة البناء",
+  "4200":"الدريس",
+  "4210":"الأبحاث والإعلام",
+  "4220":"إعمار",
+  "4230":"البحر الأحمر",
+  "4240":"سينومي ريتيل",
+  "4250":"جبل عمر",
+  "4260":"بدجت السعودية",
+  "4261":"ذيب",
+  "4262":"لومي",
+  "4263":"سال",
+  "4264":"طيران ناس",
+  "4265":"شري",
+  "4270":"طباعة وتغليف",
+  "4280":"المملكة",
+  "4290":"الخليج للتدريب",
+  "4291":"الوطنية للتعليم",
+  "4292":"عطاء",
+  "4300":"دار الأركان",
+  "4310":"مدينة المعرفة",
+  "4320":"الأندلس",
+  "4321":"سينومي سنترز",
+  "4322":"رتال",
+  "4323":"سمو",
+  "4324":"بنان",
+  "4325":"مسار",
+  "4326":"الماجدية",
+  "4327":"الرمز",
+  "4330":"الرياض ريت",
+  "4331":"الجزيرة ريت",
+  "4332":"جدوى ريت الحرمين",
+  "4333":"تعليم ريت",
+  "4334":"المعذر ريت",
+  "4335":"مشاركة ريت",
+  "4336":"ملكية ريت",
+  "4337":"العزيزية ريت",
+  "4338":"الأهلي ريت 1",
+  "4339":"دراية ريت",
+  "4340":"الراجحي ريت",
+  "4342":"جدوى ريت السعودية",
+  "4344":"سدكو كابيتال ريت",
+  "4345":"الإنماء ريت للتجزئة",
+  "4346":"ميفك ريت",
+  "4347":"بنيان ريت",
+  "4348":"الخبير ريت",
+  "4349":"الإنماء ريت الفندقي",
+  "4350":"الاستثمار ريت",
+  "4700":"الخبير للدخل",
+  "4701":"الخبير للنمو والدخل",
+  "4702":"الخبير للدخل 2030",
+  "4703":"سدكو متعدد الأصول",
+  "5110":"السعودية للطاقة",
+  "6001":"حلواني إخوان",
+  "6002":"هرفي للأغذية",
+  "6004":"كاتريون",
+  "6010":"نادك",
+  "6012":"ريدان",
+  "6013":"التطويرية الغذائية",
+  "6014":"الآمار",
+  "6015":"أمريكانا",
+  "6016":"برغرايززر",
+  "6017":"جاهز",
+  "6018":"الأندية للرياضة",
+  "6019":"المسار الشامل",
+  "6020":"جاكو",
+  "6040":"تبوك الزراعية",
+  "6050":"الأسماك",
+  "6060":"الشرقية للتنمية",
+  "6070":"الجوف",
+  "6090":"جازادكو",
+  "7010":"اس تي سي",
+  "7020":"إتحاد إتصالات",
+  "7030":"زين السعودية",
+  "7040":"قو للإتصالات",
+  "7200":"ام آي اس",
+  "7201":"بحر العرب",
+  "7202":"سلوشنز",
+  "7203":"علم",
+  "7204":"توبي",
+  "7211":"عزم",
+  "8010":"التعاونية",
+  "8012":"جزيرة تكافل",
+  "8020":"ملاذ للتأمين",
+  "8030":"ميدغلف للتأمين",
+  "8040":"متكاملة",
+  "8050":"سلامة",
+  "8060":"ولاء",
+  "8070":"الدرع العربي",
+  "8100":"سايكو",
+  "8120":"إتحاد الخليج الأهلية",
+  "8150":"أسيج",
+  "8160":"التأمين العربية",
+  "8170":"الاتحاد",
+  "8180":"الصقر للتأمين",
+  "8190":"المتحدة للتأمين",
+  "8200":"الإعادة السعودية",
+  "8210":"بوبا العربية",
+  "8230":"تكافل الراجحي",
+  "8240":"تْشب",
+  "8250":"جي آي جي",
+  "8260":"الخليجية العامة",
+  "8280":"ليفا",
+  "8300":"الوطنية",
+  "8310":"أمانة للتأمين",
+  "8311":"عناية",
+  "8313":"رسن",
+  "9400":"صندوق يقين 30",
+  "9401":"صندوق يقين للبتروكيماويات",
+  "9402":"صندوق الأول للاستثمار الكمي المتداول",
+  "9403":"صندوق البلاد للصكوك السيادية",
+  "9404":"صندوق الإنماء للصكوك الحكومية",
+  "9405":"صندوق البلاد للذهب",
+  "9406":"صندوق البلاد الأمريكي",
+  "9407":"صندوق البلاد التقني الأمريكي",
+  "9408":"صندوق البلاد للنمو السعودي",
+  "9409":"صندوق يقين إي إس جي",
+  "9410":"صندوق البلاد هونج كونج الصين",
+  "9411":"صندوق الأول للاستثمار هونج كونج",
+  "9412":"البلاد إم إس سي آي المتداول للأسهم السعودية"
+};
+
+const SAUDI_SECTORS = {
+  "1010":"البنوك",
+  "1020":"البنوك",
+  "1030":"البنوك",
+  "1050":"البنوك",
+  "1060":"البنوك",
+  "1080":"البنوك",
+  "1111":"الخدمات",
+  "1120":"البنوك",
+  "1140":"البنوك",
+  "1150":"البنوك",
+  "1180":"البنوك",
+  "1182":"الخدمات",
+  "1183":"الخدمات",
+  "1201":"الإستثمار الصناعي",
+  "1202":"الإستثمار الصناعي",
+  "1210":"الإستثمار الصناعي",
+  "1211":"الإستثمار الصناعي",
+  "1212":"الإستثمار الصناعي",
+  "1213":"الإستثمار الصناعي",
+  "1214":"الإستثمار الصناعي",
+  "1301":"التشييد والبناء",
+  "1302":"التشييد والبناء",
+  "1303":"التشييد والبناء",
+  "1304":"التشييد والبناء",
+  "1320":"التشييد والبناء",
+  "1321":"التشييد والبناء",
+  "1322":"الإستثمار الصناعي",
+  "1323":"الإستثمار الصناعي",
+  "1324":"التشييد والبناء",
+  "1810":"الفنادق والسياحة",
+  "1820":"الفنادق والسياحة",
+  "1830":"التجزئة",
+  "1831":"الإعلام والنشر",
+  "1832":"الصناعة",
+  "1833":"الخدمات",
+  "1834":"الخدمات",
+  "1835":"الخدمات",
+  "2001":"الصناعات البتروكيماوية",
+  "2010":"الصناعات البتروكيماوية",
+  "2020":"الصناعات البتروكيماوية",
+  "2030":"الإستثمار المتعدد",
+  "2040":"التشييد والبناء",
+  "2050":"الزراعة والصناعات الغذائية",
+  "2060":"الصناعات البتروكيماوية",
+  "2070":"الإستثمار الصناعي",
+  "2080":"الطاقة والمرافق الخدمية",
+  "2081":"الطاقة والمرافق الخدمية",
+  "2082":"الطاقة والمرافق الخدمية",
+  "2083":"الطاقة والمرافق الخدمية",
+  "2084":"الطاقة والمرافق الخدمية",
+  "2090":"التشييد والبناء",
+  "2100":"الزراعة والصناعات الغذائية",
+  "2110":"التشييد والبناء",
+  "2120":"الإستثمار المتعدد",
+  "2130":"التشييد والبناء",
+  "2140":"التطوير العقاري",
+  "2150":"الإستثمار الصناعي",
+  "2160":"التشييد والبناء",
+  "2170":"الصناعات البتروكيماوية",
+  "2180":"الإستثمار الصناعي",
+  "2190":"الإستثمار المتعدد",
+  "2200":"التشييد والبناء",
+  "2210":"الصناعات البتروكيماوية",
+  "2220":"الإستثمار الصناعي",
+  "2222":"الطاقة والمرافق الخدمية",
+  "2223":"الطاقة والمرافق الخدمية",
+  "2230":"الإستثمار الصناعي",
+  "2240":"التشييد والبناء",
+  "2250":"الصناعات البتروكيماوية",
+  "2270":"الزراعة والصناعات الغذائية",
+  "2280":"الزراعة والصناعات الغذائية",
+  "2281":"الزراعة والصناعات الغذائية",
+  "2282":"الزراعة والصناعات الغذائية",
+  "2283":"الزراعة والصناعات الغذائية",
+  "2284":"الزراعة والصناعات الغذائية",
+  "2285":"الزراعة والصناعات الغذائية",
+  "2286":"الزراعة والصناعات الغذائية",
+  "2287":"الزراعة والصناعات الغذائية",
+  "2288":"الزراعة والصناعات الغذائية",
+  "2290":"الصناعات البتروكيماوية",
+  "2300":"الإستثمار الصناعي",
+  "2310":"الصناعات البتروكيماوية",
+  "2320":"التشييد والبناء",
+  "2330":"الصناعات البتروكيماوية",
+  "2340":"الإستثمار الصناعي",
+  "2350":"الصناعات البتروكيماوية",
+  "2360":"التشييد والبناء",
+  "2370":"التشييد والبناء",
+  "2380":"الصناعات البتروكيماوية",
+  "2381":"الطاقة والمرافق الخدمية",
+  "2382":"الطاقة والمرافق الخدمية",
+  "3002":"الأسمنت",
+  "3003":"الأسمنت",
+  "3004":"الأسمنت",
+  "3005":"الأسمنت",
+  "3007":"الإستثمار الصناعي",
+  "3008":"التجزئة",
+  "3010":"الأسمنت",
+  "3020":"الأسمنت",
+  "3030":"الأسمنت",
+  "3040":"الأسمنت",
+  "3050":"الأسمنت",
+  "3060":"الأسمنت",
+  "3080":"الأسمنت",
+  "3090":"الأسمنت",
+  "3091":"الأسمنت",
+  "3092":"الأسمنت",
+  "4001":"التجزئة",
+  "4002":"الرعاية الصحية",
+  "4003":"التجزئة",
+  "4004":"الرعاية الصحية",
+  "4005":"الرعاية الصحية",
+  "4006":"التجزئة",
+  "4007":"الرعاية الصحية",
+  "4008":"التجزئة",
+  "4009":"الرعاية الصحية",
+  "4011":"التجزئة",
+  "4012":"التجزئة",
+  "4013":"الرعاية الصحية",
+  "4014":"الإستثمار الصناعي",
+  "4015":"الإستثمار الصناعي",
+  "4016":"الإستثمار الصناعي",
+  "4017":"الرعاية الصحية",
+  "4018":"الرعاية الصحية",
+  "4019":"الرعاية الصحية",
+  "4020":"التطوير العقاري",
+  "4021":"الرعاية الصحية",
+  "4030":"النقل",
+  "4031":"النقل",
+  "4040":"النقل",
+  "4050":"التجزئة",
+  "4051":"التجزئة",
+  "4061":"الزراعة والصناعات الغذائية",
+  "4070":"الإعلام والنشر",
+  "4071":"الإعلام والنشر",
+  "4072":"الإعلام والنشر",
+  "4080":"الإستثمار المتعدد",
+  "4081":"الخدمات",
+  "4082":"الخدمات",
+  "4083":"الخدمات",
+  "4084":"الخدمات",
+  "4090":"التطوير العقاري",
+  "4100":"التطوير العقاري",
+  "4110":"النقل",
+  "4130":"الإستثمار المتعدد",
+  "4140":"الإستثمار الصناعي",
+  "4141":"التجزئة",
+  "4142":"الكهرباء",
+  "4143":"الإستثمار الصناعي",
+  "4144":"التجزئة",
+  "4145":"الإستثمار الصناعي",
+  "4146":"الإستثمار الصناعي",
+  "4147":"الإستثمار الصناعي",
+  "4148":"الإستثمار الصناعي",
+  "4150":"التطوير العقاري",
+  "4160":"التجزئة",
+  "4161":"التجزئة",
+  "4162":"التجزئة",
+  "4163":"التجزئة",
+  "4164":"التجزئة",
+  "4165":"التجزئة",
+  "4170":"الفنادق والسياحة",
+  "4180":"التجزئة",
+  "4190":"التجزئة",
+  "4191":"التجزئة",
+  "4192":"التجزئة",
+  "4193":"التجزئة",
+  "4194":"التشييد والبناء",
+  "4200":"التجزئة",
+  "4210":"الإعلام والنشر",
+  "4220":"التطوير العقاري",
+  "4230":"التشييد والبناء",
+  "4240":"التجزئة",
+  "4250":"التطوير العقاري",
+  "4260":"النقل",
+  "4261":"النقل",
+  "4262":"النقل",
+  "4263":"النقل",
+  "4264":"النقل",
+  "4265":"النقل",
+  "4270":"الإعلام والنشر",
+  "4280":"الإستثمار المتعدد",
+  "4290":"الخدمات",
+  "4291":"الخدمات",
+  "4292":"الخدمات",
+  "4300":"التطوير العقاري",
+  "4310":"التطوير العقاري",
+  "4320":"التطوير العقاري",
+  "4321":"التطوير العقاري",
+  "4322":"التطوير العقاري",
+  "4323":"التطوير العقاري",
+  "4324":"التطوير العقاري",
+  "4325":"التطوير العقاري",
+  "4326":"التطوير العقاري",
+  "4327":"التطوير العقاري",
+  "4330":"الصناديق العقارية المتداولة",
+  "4331":"الصناديق العقارية المتداولة",
+  "4332":"الصناديق العقارية المتداولة",
+  "4333":"الصناديق العقارية المتداولة",
+  "4334":"الصناديق العقارية المتداولة",
+  "4335":"الصناديق العقارية المتداولة",
+  "4336":"الصناديق العقارية المتداولة",
+  "4337":"الصناديق العقارية المتداولة",
+  "4338":"الصناديق العقارية المتداولة",
+  "4339":"الصناديق العقارية المتداولة",
+  "4340":"الصناديق العقارية المتداولة",
+  "4342":"الصناديق العقارية المتداولة",
+  "4344":"الصناديق العقارية المتداولة",
+  "4345":"الصناديق العقارية المتداولة",
+  "4346":"الصناديق العقارية المتداولة",
+  "4347":"الصناديق العقارية المتداولة",
+  "4348":"الصناديق العقارية المتداولة",
+  "4349":"الصناديق العقارية المتداولة",
+  "4350":"الصناديق العقارية المتداولة",
+  "4700":"صناديق المؤشرات",
+  "4701":"صناديق المؤشرات",
+  "4702":"صناديق المؤشرات",
+  "4703":"صناديق المؤشرات",
+  "5110":"الطاقة والمرافق الخدمية",
+  "6001":"الزراعة والصناعات الغذائية",
+  "6002":"الزراعة والصناعات الغذائية",
+  "6004":"الزراعة والصناعات الغذائية",
+  "6010":"الزراعة والصناعات الغذائية",
+  "6012":"التجزئة",
+  "6013":"الزراعة والصناعات الغذائية",
+  "6014":"التجزئة",
+  "6015":"التجزئة",
+  "6016":"الزراعة والصناعات الغذائية",
+  "6017":"الخدمات",
+  "6018":"الخدمات",
+  "6019":"الخدمات",
+  "6020":"الزراعة والصناعات الغذائية",
+  "6040":"الزراعة والصناعات الغذائية",
+  "6050":"الزراعة والصناعات الغذائية",
+  "6060":"الزراعة والصناعات الغذائية",
+  "6070":"الزراعة والصناعات الغذائية",
+  "6090":"الزراعة والصناعات الغذائية",
+  "7010":"الإتصالات وتقنية المعلومات",
+  "7020":"الإتصالات وتقنية المعلومات",
+  "7030":"الإتصالات وتقنية المعلومات",
+  "7040":"الإتصالات وتقنية المعلومات",
+  "7200":"الإتصالات وتقنية المعلومات",
+  "7201":"الإتصالات وتقنية المعلومات",
+  "7202":"الإتصالات وتقنية المعلومات",
+  "7203":"الإتصالات وتقنية المعلومات",
+  "7204":"الإتصالات وتقنية المعلومات",
+  "7211":"الإتصالات وتقنية المعلومات",
+  "8010":"التأمين",
+  "8012":"التأمين",
+  "8020":"التأمين",
+  "8030":"التأمين",
+  "8040":"التأمين",
+  "8050":"التأمين",
+  "8060":"التأمين",
+  "8070":"التأمين",
+  "8100":"التأمين",
+  "8120":"التأمين",
+  "8150":"التأمين",
+  "8160":"التأمين",
+  "8170":"التأمين",
+  "8180":"التأمين",
+  "8190":"التأمين",
+  "8200":"التأمين",
+  "8210":"التأمين",
+  "8230":"التأمين",
+  "8240":"التأمين",
+  "8250":"التأمين",
+  "8260":"التأمين",
+  "8280":"التأمين",
+  "8300":"التأمين",
+  "8310":"التأمين",
+  "8311":"التأمين",
+  "8313":"الإتصالات وتقنية المعلومات",
+  "9400":"صناديق المؤشرات",
+  "9401":"صناديق المؤشرات",
+  "9402":"صناديق المؤشرات",
+  "9403":"صناديق المؤشرات",
+  "9404":"صناديق المؤشرات",
+  "9405":"صناديق المؤشرات",
+  "9406":"صناديق المؤشرات",
+  "9407":"صناديق المؤشرات",
+  "9408":"صناديق المؤشرات",
+  "9409":"صناديق المؤشرات",
+  "9410":"صناديق المؤشرات",
+  "9411":"صناديق المؤشرات",
+  "9412":"صناديق المؤشرات"
+};
+
+// ========================================================
+//  STATE
+// ========================================================
+let state = {
+  holdings: {},     // { symbol: { shares, avgCost, sector } }
+  transactions: [], // []
+  dividends: [],    // []
+  cash: 0,
+  settings: {
+    autoCash: false
+  }
+};
+
+// ========================================================
+//  STORAGE
+// ========================================================
+function saveState() {
+  localStorage.setItem('tasi_portfolio_v2', JSON.stringify(state));
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem('tasi_portfolio_v2');
+    if (raw) {
+      state = { ...state, ...JSON.parse(raw) };
+    }
+  } catch(e) {}
+}
+
+// ========================================================
+//  PRICE CACHE  +  SAHMK API
+// ========================================================
+let priceCache  = {};
+let sahmkApiKey = '';
+
+function loadSahmkKey() {
+  sahmkApiKey = localStorage.getItem('tasi_sahmk_key') || '';
+  const el = document.getElementById('sahmk-api-key-input');
+  if (el) el.value = sahmkApiKey;
+}
+function saveSahmkKey() {
+  const val = (document.getElementById('sahmk-api-key-input')?.value || '').trim();
+  if (!val) { showToast('أدخل مفتاح API أولاً', 'error'); return; }
+  sahmkApiKey = val;
+  localStorage.setItem('tasi_sahmk_key', sahmkApiKey);
+  showToast('✅ تم حفظ مفتاح API', 'success');
+}
+
+// ════════════════════════════════════════════════════════
+//  محرك الأسعار — SAHMK API مباشرة
+//  يعمل من: GitHub Pages / localhost / أي HTTPS
+// ════════════════════════════════════════════════════════
+
+async function _sahmkFetch(symbol) {
+  if (!sahmkApiKey) return null;
+  try {
+    const r = await fetch(`https://app.sahmk.sa/api/v1/quote/${symbol}/`, {
+      headers: { 'X-API-Key': sahmkApiKey, 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(12000)
+    });
+    if (r.status === 401) { showToast('❌ مفتاح API غير صحيح','error'); return null; }
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (!d?.price || d.price <= 0) return null;
+    const prev = d.previous_close || d.price;
+    return {
+      price:     d.price,
+      change:    d.change     || (d.price - prev),
+      pct:       d.change_percent || (prev ? (d.price-prev)/prev*100 : 0),
+      prevClose: prev,
+      source:    'sahmk',
+      ts:        Date.now()
+    };
+  } catch(e) { return null; }
+}
+
+// ── اختبار الاتصال ──
+async function testSahmkConnection() {
+  const key = (document.getElementById('sahmk-api-key-input')?.value || '').trim();
+  const st  = document.getElementById('sahmk-status');
+  st.style.display = 'block';
+
+  if (!key) {
+    st.style.cssText = 'display:block;padding:.75rem .9rem;border-radius:8px;font-size:.82rem;background:var(--red-dim);color:#f0505a;border:1px solid rgba(240,80,90,.3)';
+    st.textContent = '❌ أدخل مفتاح API أولاً';
+    return;
+  }
+  st.style.cssText = 'display:block;padding:.75rem .9rem;border-radius:8px;font-size:.82rem;background:var(--bg-elevated);color:var(--text-2);border:1px solid var(--border)';
+  st.textContent = '⏳ جارٍ الاختبار...';
+
+  try {
+    const r = await fetch('https://app.sahmk.sa/api/v1/quote/2222/', {
+      headers: { 'X-API-Key': key },
+      signal: AbortSignal.timeout(12000)
+    });
+    if (r.status === 401) {
+      st.style.cssText = 'display:block;padding:.75rem .9rem;border-radius:8px;font-size:.82rem;background:var(--red-dim);color:#f0505a;border:1px solid rgba(240,80,90,.3)';
+      st.textContent = '❌ مفتاح API غير صحيح — تحقق من لوحة تحكم sahmk.sa';
+      return;
+    }
+    const d = await r.json();
+    if (d?.price > 0) {
+      st.style.cssText = 'display:block;padding:.75rem .9rem;border-radius:8px;font-size:.82rem;background:rgba(34,201,122,.12);color:#22c97a;border:1px solid rgba(34,201,122,.3)';
+      st.innerHTML = `✅ <strong>الاتصال ناجح!</strong> أرامكو: <strong>${d.price}</strong> ر.س &nbsp;|&nbsp; ${d.change_percent>=0?'+':''}${(d.change_percent||0).toFixed(2)}%`;
+      sahmkApiKey = key;
+      localStorage.setItem('tasi_sahmk_key', key);
+    } else { throw new Error(); }
+  } catch(e) {
+    if (e.message !== 'unauthorized') {
+      st.style.cssText = 'display:block;padding:.75rem .9rem;border-radius:8px;font-size:.82rem;background:var(--red-dim);color:#f0505a;border:1px solid rgba(240,80,90,.3)';
+      st.textContent = '❌ فشل الاتصال — تأكد من صحة المفتاح واتصالك بالإنترنت';
+    }
+  }
+}
+
+// ── تحديث جميع الأسهم ──
+async function refreshAllPrices() {
+  const icon = document.getElementById('refresh-icon');
+  icon.classList.add('spin'); icon.textContent = '⟳';
+
+  const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
+  if (!symbols.length) {
+    icon.classList.remove('spin');
+    showToast('لا توجد أسهم للتحديث', 'info');
+    return;
+  }
+  if (!sahmkApiKey) {
+    icon.classList.remove('spin');
+    showToast('❌ أدخل مفتاح API في الإعدادات أولاً', 'error');
+    switchTab('settings');
+    return;
+  }
+
+  let success = 0, failed = 0;
+
+  // جلب جميع الأسهم بالتوازي (أسرع من الواحد تلو الآخر)
+  const BATCH = 5; // حد SAHMK المجاني: 10/دقيقة → 5 في وقت واحد أمان
+  for (let i = 0; i < symbols.length; i += BATCH) {
+    const batch = symbols.slice(i, i + BATCH);
+    icon.textContent = `${Math.min(i + BATCH, symbols.length)}/${symbols.length}`;
+
+    const results = await Promise.allSettled(batch.map(s => _sahmkFetch(s)));
+    results.forEach((res, idx) => {
+      const sym = batch[idx];
+      if (res.status === 'fulfilled' && res.value) {
+        priceCache[sym] = res.value;
+        success++;
+      } else {
+        failed++;
+      }
+    });
+
+    renderAll();
+    // انتظر 700ms بين الدفعات لتجنب تجاوز حد 10/دقيقة
+    if (i + BATCH < symbols.length) await new Promise(r => setTimeout(r, 700));
+  }
+
+  icon.classList.remove('spin'); icon.textContent = '⟳';
+
+  if (failed === 0)
+    showToast(`✅ تم تحديث ${success} سهم بنجاح`, 'success');
+  else if (success > 0)
+    showToast(`⚠️ نجح ${success} — تعذّر ${failed}`, 'info');
+  else
+    showToast('❌ تعذّر جلب الأسعار — تحقق من مفتاح API والاتصال', 'error');
+}
+
+async function fetchPrice(symbol) {
+  const cached = priceCache[symbol];
+  if (cached && (Date.now() - cached.ts) < 5 * 60 * 1000) return cached;
+  const r = await _sahmkFetch(symbol);
+  if (r) { priceCache[symbol] = r; return r; }
+  return priceCache[symbol] || null;
+}
+
+// ========================================================
+//  HOLDING PERIOD — مدة الاحتفاظ من تاريخ أول شراء
+// ========================================================
+function holdingPeriod(dateStr) {
+  if (!dateStr) return '—';
+  const m = String(dateStr).trim().match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if (!m) return '—';
+  const bY = +m[1], bM = +m[2], bD = +m[3];
+
+  const now = new Date();
+  const tY = now.getFullYear(), tM = now.getMonth() + 1, tD = now.getDate();
+
+  // Pure day-count arithmetic — no UTC conversion, no Date subtraction
+  function toDays(y, mo, d) {
+    const dim = [0,31,28,31,30,31,30,31,31,30,31,30,31];
+    if ((y%4===0&&y%100!==0)||y%400===0) dim[2]=29;
+    let n = y*365 + Math.floor(y/4) - Math.floor(y/100) + Math.floor(y/400);
+    for (let i=1;i<mo;i++) n+=dim[i];
+    return n+d;
+  }
+
+  const diff = toDays(tY,tM,tD) - toDays(bY,bM,bD);
+  if (diff < 0)  return '—';
+  if (diff === 0) return 'اليوم';
+  if (diff === 1) return 'يوم';
+  if (diff < 7)  return `${diff} أيام`;
+  if (diff < 30) { const w=Math.floor(diff/7), d=diff%7; return d ? `${w}أ ${d}ي` : `${w} أسبوع`; }
+  if (diff < 365){ const mo=Math.floor(diff/30), d=diff%30; return d ? `${mo}ش ${d}ي` : `${mo} شهر`; }
+  const yy=Math.floor(diff/365), mo=Math.floor((diff%365)/30);
+  return mo ? `${yy}س ${mo}ش` : `${yy} سنة`;
+}
+
+// ========================================================
+//  DELETE HOLDING — حذف شركة من المحفظة
+// ========================================================
+function deleteHolding(sym) {
+  const name = SAUDI_STOCKS[sym] || sym;
+  const h    = state.holdings[sym];
+  if (!h) return;
+  const txCount  = state.transactions.filter(t => t.symbol === sym).length;
+  const divCount = state.dividends.filter(d => d.symbol === sym).length;
+  let msg = `هل تريد حذف ${name} (${sym}) من المحفظة؟`;
+  if (txCount > 0 || divCount > 0)
+    msg += `\n\nتحذير: سيتم حذف ${txCount} عملية و${divCount} توزيع مرتبطة بهذا السهم.`;
+  if (!confirm(msg)) return;
+  delete state.holdings[sym];
+  state.transactions = state.transactions.filter(t => t.symbol !== sym);
+  state.dividends    = state.dividends.filter(d => d.symbol !== sym);
+  delete priceCache[sym];
+  saveState();
+  renderAll();
+  showToast(`تم حذف ${name} من المحفظة`, 'info');
+}
+
+// ========================================================
+//  GOOGLE SHEETS TEST + TEMPLATE DOWNLOAD
+// ========================================================
+
+// ========================================================
+//  TABS
+// ========================================================
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  const idx = ['dashboard','portfolio','transactions','dividends','settings'].indexOf(tab);
+  document.querySelectorAll('.nav-btn')[idx]?.classList.add('active');
+  renderAll();
+}
+
+// ========================================================
+//  RENDER ALL
+// ========================================================
+function renderAll() {
+  renderDashboard();
+  renderPortfolioTable();
+  renderTransactions();
+  renderDividends();
+  updateHeaderCash();
+  updateCashInput();
+}
+
+// ========================================================
+//  HEADER CASH
+// ========================================================
+function updateHeaderCash() {
+  document.getElementById('header-cash').textContent = fmt(state.cash);
+}
+function updateCashInput() {
+  document.getElementById('cash-input').value = state.cash.toFixed(2);
+  document.getElementById('modal-cash-input').value = state.cash.toFixed(2);
+}
+
+// ========================================================
+//  DASHBOARD
+// ========================================================
+// ── Allocation tab state ──
+let _allocTab = 'sector'; // 'sector' | 'stock'
+function setAllocTab(tab) {
+  _allocTab = tab;
+  document.getElementById('alloc-tab-sector').classList.toggle('active', tab === 'sector');
+  document.getElementById('alloc-tab-stock').classList.toggle('active',  tab === 'stock');
+  // Re-render with current totalValue
+  const holdings = state.holdings;
+  let tv = 0;
+  for (const sym of Object.keys(holdings)) {
+    const h = holdings[sym]; if (h.shares <= 0) continue;
+    tv += h.shares * (priceCache[sym]?.price || h.avgCost);
+  }
+  renderAllocation(tv);
+}
+
+function renderDashboard() {
+  const holdings = state.holdings;
+  let totalStocksValue = 0, totalCost = 0;
+
+  for (const sym of Object.keys(holdings)) {
+    const h = holdings[sym];
+    if (h.shares <= 0) continue;
+    const price = priceCache[sym]?.price || h.avgCost;
+    totalStocksValue += h.shares * price;
+    totalCost        += h.shares * h.avgCost;
+  }
+
+  const totalPortfolio = totalStocksValue + state.cash;
+  const pnl     = totalStocksValue - totalCost;
+  const pnlPct  = totalCost > 0 ? (pnl / totalCost) * 100 : 0;
+  const cashPct = totalPortfolio > 0 ? (state.cash / totalPortfolio) * 100 : 0;
+  const stkPct  = totalPortfolio > 0 ? (totalStocksValue / totalPortfolio) * 100 : 0;
+  const totalDiv = state.dividends.reduce((s, d) => s + (d.totalAmount || 0), 0);
+
+  // ── Card 1: إجمالي المحفظة ──
+  document.getElementById('total-portfolio').textContent = fmt(totalPortfolio) + ' ر.س';
+  document.getElementById('total-invested').textContent  = 'مستثمر: ' + fmt(totalCost) + ' ر.س';
+
+  // ── Card 2: ر/خ ──
+  const pnlEl    = document.getElementById('total-pnl');
+  const pnlPctEl = document.getElementById('total-pnl-pct');
+  const pnlCard  = document.getElementById('pnl-card');
+  const pnlClr   = pnl >= 0 ? '#22c97a' : '#f0505a';
+  pnlEl.textContent    = (pnl >= 0 ? '+' : '') + fmt(pnl) + ' ر.س';
+  pnlEl.style.color    = pnlClr; pnlEl.className = 'stat-value';
+  pnlPctEl.textContent = (pnlPct >= 0 ? '▲ +' : '▼ ') + fmt(Math.abs(pnlPct), 2) + '%';
+  pnlPctEl.style.color = pnlClr; pnlPctEl.className = 'stat-sub';
+  pnlCard.className    = 'stat-card ' + (pnl >= 0 ? 'green' : 'red');
+
+  // ── Card 3: توزيع الأصول (asset split bar) ──
+  const bar = document.getElementById('asset-split-bar');
+  if (bar) {
+    bar.innerHTML = totalPortfolio > 0
+      ? `<div style="width:${stkPct}%;background:#4e9df0;transition:width 0.5s"></div>
+         <div style="width:${cashPct}%;background:#e8a020;transition:width 0.5s"></div>`
+      : `<div style="width:100%;background:var(--bg-elevated)"></div>`;
+  }
+  const sp = document.getElementById('stocks-pct');
+  const cp = document.getElementById('cash-pct-bar');
+  if (sp) sp.textContent = fmt(stkPct, 1) + '%';
+  if (cp) cp.textContent = fmt(cashPct, 1) + '%';
+  const sv = document.getElementById('stocks-value-sm');
+  const cv = document.getElementById('cash-value-sm');
+  if (sv) sv.textContent = fmt(totalStocksValue);
+  if (cv) cv.textContent = fmt(state.cash);
+
+  // ── Card 4: كاش ──
+  document.getElementById('dash-cash').textContent     = fmt(state.cash) + ' ر.س';
+  document.getElementById('dash-cash-pct').textContent = fmt(cashPct, 1) + '% من الإجمالي';
+
+  // ── Card 5: توزيعات ──
+  document.getElementById('total-dividends').textContent = fmt(totalDiv) + ' ر.س';
+
+  // ── Sub-panels ──
+  renderTopHoldings(totalStocksValue);
+  renderAllocation(totalStocksValue);
+}
+
+function renderTopHoldings(totalValue) {
+  const wrap = document.getElementById('top-holdings-wrap');
+  const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
+
+  if (symbols.length === 0) {
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">📋</div><p>لا توجد أسهم في محفظتك بعد</p><button class="btn btn-primary" onclick="openAddModal()">+ إضافة سهم</button></div>`;
+    return;
+  }
+
+  // Sort by value
+  const sorted = symbols.sort((a, b) => {
+    const va = state.holdings[a].shares * (priceCache[a]?.price || state.holdings[a].avgCost);
+    const vb = state.holdings[b].shares * (priceCache[b]?.price || state.holdings[b].avgCost);
+    return vb - va;
+  }).slice(0, 8);
+
+  let rows = sorted.map(sym => {
+    const h = state.holdings[sym];
+    const p = priceCache[sym];
+    const price = p ? p.price : h.avgCost;
+    const value = h.shares * price;
+    const cost  = h.shares * h.avgCost;
+    const pnl   = value - cost;
+    const pct   = cost > 0 ? (pnl / cost) * 100 : 0;
+    const clr   = pnl >= 0 ? '#22c97a' : '#f0505a';
+    const bg    = pnl >= 0 ? 'rgba(34,201,122,0.12)' : 'rgba(240,80,90,0.12)';
+    const arrow = pnl >= 0 ? '▲' : '▼';
+    const sector = SAUDI_SECTORS[sym] || '';
+    const priceStr = p ? fmt(price) : `<span style="color:#3d4760;font-size:0.76rem">جاري...</span>`;
+    return `
+      <tr>
+        <td><span class="symbol-badge">${sym}</span></td>
+        <td>
+          <div class="stock-name">${SAUDI_STOCKS[sym] || sym}</div>
+          <div class="stock-sector">${sector}</div>
+        </td>
+        <td style="direction:ltr;text-align:right">${fmtN(h.shares)}</td>
+        <td style="direction:ltr;text-align:right">${priceStr}</td>
+        <td style="direction:ltr;text-align:right;font-weight:700">${fmt(value)}</td>
+        <td>
+          <span style="display:inline-flex;align-items:center;gap:3px;padding:3px 8px;border-radius:6px;font-size:0.77rem;font-weight:700;background:${bg};color:${clr}">
+            ${arrow} ${fmt(Math.abs(pct), 2)}%
+          </span>
+        </td>
+        <td>
+          <button class="btn btn-ghost btn-sm" onclick="openSellModal('${sym}')">بيع</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>الرمز</th><th>اسم السهم</th><th>الكمية</th>
+        <th>السعر الحالي</th><th>القيمة (ر.س)</th><th>الأداء</th><th></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+function renderAllocation(totalValue) {
+  const wrap    = document.getElementById('allocation-list');
+  const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
+  const total   = totalValue + state.cash;
+
+  if (symbols.length === 0 || total <= 0) {
+    wrap.innerHTML = `<div class="empty-state" style="padding:1.5rem"><p>أضف أسهماً لرؤية التوزيع</p></div>`;
+    return;
+  }
+
+  const COLORS = ['#4e9df0','#22c97a','#f0b429','#f0505a','#b066f0','#f07850','#50e0f0','#e8a020','#90c060','#ff7eb3','#56cfe1','#ffb347'];
+
+  // ── Sector view ──
+  if (_allocTab === 'sector') {
+    // Group by sector
+    const sectorMap = {};
+    symbols.forEach(sym => {
+      const h   = state.holdings[sym];
+      const val = h.shares * (priceCache[sym]?.price || h.avgCost);
+      const sec = SAUDI_SECTORS[sym] || 'أخرى';
+      sectorMap[sec] = (sectorMap[sec] || 0) + val;
+    });
+    const sorted = Object.entries(sectorMap).sort((a,b) => b[1]-a[1]);
+    let html = sorted.map(([sec, val], i) => {
+      const pct = total > 0 ? (val / total * 100) : 0;
+      return `
+        <div class="alloc-row">
+          <div class="alloc-label">
+            <span style="display:flex;align-items:center;gap:6px">
+              <span style="width:10px;height:10px;border-radius:3px;background:${COLORS[i%COLORS.length]};flex-shrink:0;display:inline-block"></span>
+              <span style="font-size:0.79rem;color:var(--text-1)">${sec}</span>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:0.74rem;color:var(--text-2)">${fmt(val)} ر.س</span>
+              <span style="font-size:0.8rem;font-weight:700;min-width:36px;text-align:left;direction:ltr">${fmt(pct,1)}%</span>
+            </span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${pct}%;background:${COLORS[i%COLORS.length]}"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    // Cash row
+    if (state.cash > 0) {
+      const cashPct = total > 0 ? (state.cash / total * 100) : 0;
+      html += `
+        <div class="alloc-row" style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border)">
+          <div class="alloc-label">
+            <span style="display:flex;align-items:center;gap:6px">
+              <span style="width:10px;height:10px;border-radius:3px;background:#e8a020;flex-shrink:0;display:inline-block"></span>
+              <span style="font-size:0.79rem;color:var(--text-2)">💵 كاش</span>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:0.74rem;color:var(--text-2)">${fmt(state.cash)} ر.س</span>
+              <span style="font-size:0.8rem;font-weight:700;color:#e8a020;min-width:36px;text-align:left;direction:ltr">${fmt(cashPct,1)}%</span>
+            </span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${cashPct}%;background:#e8a020"></div>
+          </div>
+        </div>`;
+    }
+    wrap.innerHTML = html;
+
+  } else {
+    // ── Individual stock view ──
+    const items = symbols.map(sym => {
+      const h   = state.holdings[sym];
+      const val = h.shares * (priceCache[sym]?.price || h.avgCost);
+      return { sym, val };
+    }).sort((a,b) => b.val - a.val);
+
+    let html = items.map((item, i) => {
+      const pct = total > 0 ? (item.val / total * 100) : 0;
+      return `
+        <div class="alloc-row">
+          <div class="alloc-label">
+            <span style="display:flex;align-items:center;gap:6px">
+              <span style="width:10px;height:10px;border-radius:50%;background:${COLORS[i%COLORS.length]};flex-shrink:0;display:inline-block"></span>
+              <span style="font-size:0.79rem">${SAUDI_STOCKS[item.sym] || item.sym}</span>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:0.74rem;color:var(--text-2)">${fmt(item.val)} ر.س</span>
+              <span style="font-size:0.8rem;font-weight:700;min-width:36px;text-align:left;direction:ltr">${fmt(pct,1)}%</span>
+            </span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${pct}%;background:${COLORS[i%COLORS.length]}"></div>
+          </div>
+        </div>`;
+    }).join('');
+
+    if (state.cash > 0) {
+      const cashPct = total > 0 ? (state.cash / total * 100) : 0;
+      html += `
+        <div class="alloc-row" style="margin-top:0.5rem;padding-top:0.5rem;border-top:1px solid var(--border)">
+          <div class="alloc-label">
+            <span style="display:flex;align-items:center;gap:6px">
+              <span style="width:10px;height:10px;border-radius:50%;background:#e8a020;flex-shrink:0;display:inline-block"></span>
+              <span style="font-size:0.79rem;color:var(--text-2)">💵 كاش</span>
+            </span>
+            <span style="display:flex;align-items:center;gap:8px">
+              <span style="font-size:0.74rem;color:var(--text-2)">${fmt(state.cash)} ر.س</span>
+              <span style="font-size:0.8rem;font-weight:700;color:#e8a020;min-width:36px;text-align:left;direction:ltr">${fmt(cashPct,1)}%</span>
+            </span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width:${cashPct}%;background:#e8a020"></div>
+          </div>
+        </div>`;
+    }
+    wrap.innerHTML = html;
+  }
+}
+
+// ========================================================
+//  PORTFOLIO TABLE
+// ========================================================
+function renderPortfolioTable() {
+  const wrap = document.getElementById('portfolio-table-wrap');
+  const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
+
+  if (symbols.length === 0) {
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">💼</div><p>محفظتك فارغة حتى الآن</p><button class="btn btn-primary" onclick="openAddModal()">+ أضف سهمك الأول</button></div>`;
+    return;
+  }
+
+  const rows = symbols.map(sym => {
+    const h      = state.holdings[sym];
+    const p      = priceCache[sym];
+    const price  = p ? p.price : null;
+    const value  = price != null ? h.shares * price : null;
+    const cost   = h.shares * h.avgCost;
+    const pnl    = value != null ? value - cost : null;
+    const pct    = (pnl != null && cost > 0) ? (pnl / cost) * 100 : null;
+    const sector = SAUDI_SECTORS[sym] || '';
+    const holding = holdingPeriod(h.firstBuyDate);
+
+    const pnlColor = pnl  == null ? 'color:var(--text-3)' : pnl  >= 0 ? 'color:#22c97a;font-weight:700' : 'color:#f0505a;font-weight:700';
+    const pctColor = pct  == null ? 'color:var(--text-3)' : pct  >= 0 ? 'color:#22c97a;font-weight:700' : 'color:#f0505a;font-weight:700';
+
+    const priceCell = price != null
+      ? `<span style="font-weight:700">${fmt(price)}</span>`
+      : `<span style="color:var(--text-3)">—</span>`;
+
+    return `
+      <tr>
+        <td><span class="symbol-badge">${sym}</span></td>
+        <td>
+          <div class="stock-name">${SAUDI_STOCKS[sym] || sym}</div>
+          <div class="stock-sector">${sector}</div>
+        </td>
+        <td style="direction:ltr;text-align:right;font-weight:600">${fmtN(h.shares)}</td>
+        <td style="direction:ltr;text-align:right;color:var(--text-2)">${fmt(h.avgCost)}</td>
+        <td style="direction:ltr;text-align:right">${priceCell}</td>
+        <td style="direction:ltr;text-align:right;font-weight:700">
+          ${value != null ? fmt(value) : '<span style="color:var(--text-3)">—</span>'}
+        </td>
+        <td style="direction:ltr;text-align:right">
+          <span style="${pnlColor}">${pnl != null ? (pnl>=0?'+':'')+fmt(pnl) : '—'}</span>
+        </td>
+        <td style="direction:ltr;text-align:right">
+          <span style="${pctColor}">${pct != null ? (pct>=0?'+':'')+fmt(pct,2)+'%' : '—'}</span>
+        </td>
+        <td style="text-align:center;white-space:nowrap">
+          <span style="font-size:0.8rem;color:var(--text-2)">${holding}</span>
+        </td>
+        <td>
+          <div style="display:flex;gap:0.3rem;flex-wrap:nowrap">
+            <button class="btn btn-ghost btn-sm" onclick="openAddModal('${sym}')">شراء</button>
+            <button class="btn btn-red btn-sm" onclick="openSellModal('${sym}')">بيع</button>
+            <button class="btn btn-blue btn-sm" onclick="openHistoryModal('${sym}')">📋</button>
+            <button class="btn btn-sm" style="background:rgba(240,80,90,0.08);color:#f0505a;border:1px solid rgba(240,80,90,0.2)" onclick="deleteHolding('${sym}')">🗑</button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>الرمز</th>
+        <th>اسم السهم</th>
+        <th>الكمية</th>
+        <th>متوسط التكلفة</th>
+        <th>السعر الحالي</th>
+        <th>القيمة (ر.س)</th>
+        <th>ر/خ (ر.س)</th>
+        <th>ر/خ %</th>
+        <th>مدة الاحتفاظ</th>
+        <th>الإجراءات</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ========================================================
+//  TRANSACTIONS TABLE
+// ========================================================
+function renderTransactions() {
+  const wrap = document.getElementById('tx-table-wrap');
+  const filterType = document.getElementById('tx-filter-type')?.value || '';
+  const filterSym = document.getElementById('tx-filter-sym')?.value || '';
+
+  // Update symbol filter dropdown
+  const symSelect = document.getElementById('tx-filter-sym');
+  if (symSelect) {
+    const current = symSelect.value;
+    const syms = [...new Set(state.transactions.map(t => t.symbol))].sort();
+    symSelect.innerHTML = '<option value="">كل الأسهم</option>' + syms.map(s => `<option value="${s}" ${s===current?'selected':''}>${s} - ${SAUDI_STOCKS[s]||s}</option>`).join('');
+  }
+
+  let txs = [...state.transactions];
+  if (filterType) txs = txs.filter(t => t.type === filterType);
+  if (filterSym) txs = txs.filter(t => t.symbol === filterSym);
+  txs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  if (txs.length === 0) {
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">📒</div><p>لا توجد عمليات مسجلة</p></div>`;
+    return;
+  }
+
+  const typeLabel = { buy:'<span class="tx-chip tx-buy">🟢 شراء</span>', sell:'<span class="tx-chip tx-sell">🔴 بيع</span>', dividend:'<span class="tx-chip tx-dividend">💰 توزيع</span>', reinvest:'<span class="tx-chip tx-reinvest">🔁 إعادة استثمار</span>' };
+
+  const rows = txs.map(t => `
+    <tr>
+      <td style="color:var(--text-2);font-size:0.8rem">${t.date}</td>
+      <td>${typeLabel[t.type] || t.type}</td>
+      <td><span class="symbol-badge">${t.symbol}</span></td>
+      <td style="font-size:0.8rem;color:var(--text-2)">${SAUDI_STOCKS[t.symbol]||''}</td>
+      <td style="direction:ltr;text-align:right">${fmtN(t.shares || 0)}</td>
+      <td style="direction:ltr;text-align:right">${t.price ? fmt(t.price) : '—'}</td>
+      <td style="direction:ltr;text-align:right;font-weight:700">${t.total ? fmt(t.total) : '—'}</td>
+      <td style="color:var(--text-2);font-size:0.78rem">${t.note || ''}</td>
+      <td>
+        <button class="btn btn-red btn-sm" onclick="deleteTransaction('${t.id}')">حذف</button>
+      </td>
+    </tr>`).join('');
+
+  wrap.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>التاريخ</th><th>النوع</th><th>الرمز</th><th>السهم</th>
+        <th>الكمية</th><th>السعر</th><th>الإجمالي</th><th>ملاحظة</th><th></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ========================================================
+//  DIVIDENDS TABLE
+// ========================================================
+function renderDividends() {
+  const wrap = document.getElementById('div-table-wrap');
+  const divs = [...state.dividends].sort((a, b) => new Date(b.payDate) - new Date(a.payDate));
+
+  if (divs.length === 0) {
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">🏦</div><p>لا توجد توزيعات مسجلة</p><button class="btn btn-primary" onclick="openDividendModal()">+ سجّل أول توزيع</button></div>`;
+    return;
+  }
+
+  const rows = divs.map(d => {
+    const reinvestBadge = d.reinvested ? `<span class="badge badge-blue">إعادة استثمار</span>` : `<span class="badge badge-gold">نقدي</span>`;
+    return `
+      <tr>
+        <td style="color:var(--text-2);font-size:0.8rem">${d.payDate || d.exDate}</td>
+        <td><span class="symbol-badge">${d.symbol}</span></td>
+        <td style="font-size:0.8rem;color:var(--text-2)">${SAUDI_STOCKS[d.symbol]||''}</td>
+        <td style="direction:ltr;text-align:right">${fmtN(d.eligibleShares)}</td>
+        <td style="direction:ltr;text-align:right">${fmt(d.perShare)}</td>
+        <td style="direction:ltr;text-align:right;font-weight:700;color:var(--accent)">${fmt(d.totalAmount)}</td>
+        <td>${reinvestBadge}</td>
+        <td style="color:var(--text-2);font-size:0.78rem">${d.reinvested ? `+${fmtN(d.addedShares)} سهم بسعر ${fmt(d.reinvestPrice)}` : ''}</td>
+        <td>
+          <button class="btn btn-red btn-sm" onclick="deleteDividend('${d.id}')">حذف</button>
+        </td>
+      </tr>`;
+  }).join('');
+
+  wrap.innerHTML = `
+    <table>
+      <thead><tr>
+        <th>التاريخ</th><th>الرمز</th><th>السهم</th>
+        <th>الأسهم المؤهلة</th><th>للسهم (ر.س)</th><th>الإجمالي (ر.س)</th>
+        <th>النوع</th><th>تفاصيل</th><th></th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+}
+
+// ========================================================
+//  SYMBOL LOOKUP
+// ========================================================
+function lookupSymbol(val) {
+  val = val.trim().toUpperCase();
+  const result = document.getElementById('symbol-lookup-result');
+  result.style.borderColor = 'var(--accent)';
+  result.style.color = 'var(--accent)';
+  if (!val) { result.classList.remove('show'); return; }
+
+  // Exact match
+  if (SAUDI_STOCKS[val]) {
+    const sector = SAUDI_SECTORS[val] ? ` | ${SAUDI_SECTORS[val]}` : '';
+    result.textContent = `✔ ${val} — ${SAUDI_STOCKS[val]}${sector}`;
+    result.classList.add('show');
+  } else if (val.length >= 2) {
+    // Partial match — find first key starting with val
+    const match = Object.keys(SAUDI_STOCKS).find(k => k.startsWith(val));
+    if (match) {
+      const sector = SAUDI_SECTORS[match] ? ` | ${SAUDI_SECTORS[match]}` : '';
+      result.textContent = `✔ ${match} — ${SAUDI_STOCKS[match]}${sector}`;
+      result.classList.add('show');
+    } else if (val.length >= 4) {
+      result.textContent = `⚠ الرمز "${val}" غير موجود في القائمة — يمكنك المتابعة بإضافته يدوياً`;
+      result.style.borderColor = 'var(--text-3)';
+      result.style.color = 'var(--text-2)';
+      result.classList.add('show');
+    } else {
+      result.classList.remove('show');
+    }
+  } else {
+    result.classList.remove('show');
+  }
+
+  // Recalculate avg cost if holding exists
+  calcAddTotal();
+}
+
+// ========================================================
+//  ADD STOCK MODAL
+// ========================================================
+function openAddModal(prefillSym) {
+  document.getElementById('add-symbol').value = prefillSym || '';
+  document.getElementById('add-shares').value = '';
+  document.getElementById('add-price').value = '';
+  document.getElementById('add-commission').value = '';
+  document.getElementById('add-note').value = '';
+  document.getElementById('add-date').value = today();
+  document.getElementById('add-total-cost').textContent = '0.00 ر.س';
+  document.getElementById('add-avg-cost').textContent = '-';
+  document.getElementById('symbol-lookup-result').classList.remove('show');
+  if (prefillSym) lookupSymbol(prefillSym);
+  openModal('modal-add');
+}
+
+function calcAddTotal() {
+  const shares = parseFloat(document.getElementById('add-shares').value) || 0;
+  const price = parseFloat(document.getElementById('add-price').value) || 0;
+  const commission = parseFloat(document.getElementById('add-commission').value) || 0;
+  const sym = document.getElementById('add-symbol').value.trim().toUpperCase();
+
+  const total = shares * price + commission;
+  document.getElementById('add-total-cost').textContent = fmt(total) + ' ر.س';
+
+  if (sym && state.holdings[sym] && shares > 0 && price > 0) {
+    const h = state.holdings[sym];
+    const newAvg = (h.shares * h.avgCost + shares * price + commission) / (h.shares + shares);
+    document.getElementById('add-avg-cost').textContent = fmt(newAvg) + ' ر.س';
+    document.getElementById('avg-cost-row').style.display = 'flex';
+  } else if (shares > 0 && price > 0) {
+    const avgPerShare = (shares * price + commission) / shares;
+    document.getElementById('add-avg-cost').textContent = fmt(avgPerShare) + ' ر.س';
+    document.getElementById('avg-cost-row').style.display = 'flex';
+  } else {
+    document.getElementById('avg-cost-row').style.display = 'none';
+  }
+}
+
+function confirmAddStock() {
+  const sym = document.getElementById('add-symbol').value.trim().toUpperCase();
+  const shares = parseFloat(document.getElementById('add-shares').value);
+  const price = parseFloat(document.getElementById('add-price').value);
+  const commission = parseFloat(document.getElementById('add-commission').value) || 0;
+  const date = document.getElementById('add-date').value;
+  const note = document.getElementById('add-note').value.trim();
+
+  if (!sym) return showToast('أدخل رمز السهم', 'error');
+  if (!shares || shares <= 0) return showToast('أدخل عدد الأسهم', 'error');
+  if (!price || price <= 0) return showToast('أدخل سعر الشراء', 'error');
+  if (!date) return showToast('أدخل تاريخ الشراء', 'error');
+
+  const totalCost = shares * price + commission;
+
+  // Update holding (weighted avg cost)
+  if (!state.holdings[sym]) {
+    state.holdings[sym] = { shares: 0, avgCost: 0, firstBuyDate: date };
+  }
+  const h = state.holdings[sym];
+  const newAvgCost = (h.shares * h.avgCost + shares * price + commission) / (h.shares + shares);
+  h.avgCost = newAvgCost;
+  h.shares += shares;
+  if (!h.firstBuyDate || date < h.firstBuyDate) h.firstBuyDate = date;
+
+  // Auto deduct cash
+  if (state.settings.autoCash) {
+    state.cash = Math.max(0, state.cash - totalCost);
+  }
+
+  // Log transaction
+  state.transactions.push({
+    id: uid(),
+    type: 'buy',
+    symbol: sym,
+    shares,
+    price,
+    commission,
+    total: totalCost,
+    date,
+    note
+  });
+
+  saveState();
+  closeModal('modal-add');
+  renderAll();
+  showToast(`تم شراء ${fmtN(shares)} سهم من ${SAUDI_STOCKS[sym] || sym}`, 'success');
+  fetchPrice(sym).then(r => { if(r) renderAll(); });
+}
+
+// ========================================================
+//  SELL MODAL
+// ========================================================
+function openSellModal(sym) {
+  const h = state.holdings[sym];
+  if (!h || h.shares <= 0) return showToast('لا توجد أسهم كافية', 'error');
+  document.getElementById('sell-symbol').value = sym;
+  document.getElementById('sell-shares').value = '';
+  document.getElementById('sell-price').value = '';
+  document.getElementById('sell-commission').value = '';
+  document.getElementById('sell-note').value = '';
+  document.getElementById('sell-date').value = today();
+  document.getElementById('sell-available').textContent = fmtN(h.shares);
+  document.getElementById('sell-avg').textContent = fmt(h.avgCost) + ' ر.س';
+  document.getElementById('sell-net').textContent = '0.00 ر.س';
+  document.getElementById('sell-pnl').textContent = '0.00 ر.س';
+  openModal('modal-sell');
+}
+
+function calcSellTotal() {
+  const sym = document.getElementById('sell-symbol').value;
+  const h = state.holdings[sym];
+  if (!h) return;
+  const shares = parseFloat(document.getElementById('sell-shares').value) || 0;
+  const price = parseFloat(document.getElementById('sell-price').value) || 0;
+  const commission = parseFloat(document.getElementById('sell-commission').value) || 0;
+  const net = shares * price - commission;
+  const cost = shares * h.avgCost;
+  const pnl = net - cost;
+  document.getElementById('sell-net').textContent = fmt(net) + ' ر.س';
+  const pnlEl = document.getElementById('sell-pnl');
+  pnlEl.textContent  = (pnl >= 0 ? '+' : '') + fmt(pnl) + ' ر.س';
+  pnlEl.style.color  = pnl >= 0 ? '#22c97a' : '#f0505a';
+  pnlEl.style.fontWeight = '700';
+  pnlEl.className = '';
+}
+
+function confirmSell() {
+  const sym = document.getElementById('sell-symbol').value;
+  const shares = parseFloat(document.getElementById('sell-shares').value);
+  const price = parseFloat(document.getElementById('sell-price').value);
+  const commission = parseFloat(document.getElementById('sell-commission').value) || 0;
+  const date = document.getElementById('sell-date').value;
+  const note = document.getElementById('sell-note').value.trim();
+  const h = state.holdings[sym];
+
+  if (!shares || shares <= 0) return showToast('أدخل عدد الأسهم', 'error');
+  if (!price || price <= 0) return showToast('أدخل سعر البيع', 'error');
+  if (!h || shares > h.shares) return showToast('لا توجد أسهم كافية', 'error');
+
+  const net = shares * price - commission;
+  const cost = shares * h.avgCost;
+
+  h.shares -= shares;
+  if (h.shares <= 0) { h.shares = 0; }
+
+  if (state.settings.autoCash) {
+    state.cash += net;
+  }
+
+  state.transactions.push({
+    id: uid(),
+    type: 'sell',
+    symbol: sym,
+    shares,
+    price,
+    commission,
+    total: net,
+    pnl: net - cost,
+    date,
+    note
+  });
+
+  saveState();
+  closeModal('modal-sell');
+  renderAll();
+  showToast(`تم بيع ${fmtN(shares)} سهم من ${SAUDI_STOCKS[sym] || sym}`, 'success');
+}
+
+// ========================================================
+//  DIVIDEND MODAL
+// ========================================================
+function openDividendModal() {
+  const select = document.getElementById('div-symbol');
+  const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
+  select.innerHTML = '<option value="">-- اختر السهم --</option>' + symbols.map(s => `<option value="${s}">${s} - ${SAUDI_STOCKS[s]||s}</option>`).join('');
+  document.getElementById('div-per-share').value = '';
+  document.getElementById('div-exdate').value = today();
+  document.getElementById('div-paydate').value = today();
+  document.getElementById('div-reinvest').checked = false;
+  document.getElementById('reinvest-fields').classList.add('hidden');
+  document.getElementById('div-stock-info').style.display = 'none';
+  document.getElementById('div-calc-card').style.display = 'none';
+  document.getElementById('reinvest-result').style.display = 'none';
+  openModal('modal-dividend');
+}
+
+function updateDivInfo() {
+  const sym = document.getElementById('div-symbol').value;
+  const h = state.holdings[sym];
+  if (!sym || !h) { document.getElementById('div-stock-info').style.display = 'none'; return; }
+  document.getElementById('div-owned').textContent = fmtN(h.shares);
+  document.getElementById('div-first-date').textContent = h.firstBuyDate || '—';
+  document.getElementById('div-stock-info').style.display = 'block';
+  calcDivTotal();
+}
+
+function calcDivTotal() {
+  const sym = document.getElementById('div-symbol').value;
+  const h = state.holdings[sym];
+  if (!sym || !h) return;
+  const perShare = parseFloat(document.getElementById('div-per-share').value) || 0;
+  const exDate = document.getElementById('div-exdate').value;
+
+  // Eligible shares = shares owned before ex-date
+  let eligible = 0;
+  if (exDate) {
+    const buyTxs = state.transactions.filter(t => t.symbol === sym && t.type === 'buy' && t.date <= exDate);
+    const sellTxs = state.transactions.filter(t => t.symbol === sym && t.type === 'sell' && t.date <= exDate);
+    const bought = buyTxs.reduce((s, t) => s + t.shares, 0);
+    const sold = sellTxs.reduce((s, t) => s + t.shares, 0);
+    eligible = Math.max(0, bought - sold);
+  } else {
+    eligible = h.shares;
+  }
+
+  const total = eligible * perShare;
+  document.getElementById('div-eligible').textContent = fmtN(eligible);
+  document.getElementById('div-total').textContent = fmt(total) + ' ر.س';
+  document.getElementById('div-calc-card').style.display = eligible > 0 ? 'block' : 'none';
+  calcReinvest();
+}
+
+function toggleReinvestFields() {
+  const checked = document.getElementById('div-reinvest').checked;
+  document.getElementById('reinvest-fields').classList.toggle('hidden', !checked);
+}
+
+function calcReinvest() {
+  const sym = document.getElementById('div-symbol').value;
+  const h = state.holdings[sym];
+  if (!sym || !h || !document.getElementById('div-reinvest').checked) {
+    document.getElementById('reinvest-result').style.display = 'none'; return;
+  }
+  const perShare = parseFloat(document.getElementById('div-per-share').value) || 0;
+  const eligible = parseInt(document.getElementById('div-eligible').textContent.replace(/,/g,'')) || 0;
+  const total = eligible * perShare;
+  const riPrice = parseFloat(document.getElementById('div-reinvest-price').value) || 0;
+  if (!riPrice || total <= 0) { document.getElementById('reinvest-result').style.display = 'none'; return; }
+
+  const addedShares = total / riPrice;
+  const newAvg = (h.shares * h.avgCost + total) / (h.shares + addedShares);
+  document.getElementById('ri-shares').textContent = fmt(addedShares, 4);
+  document.getElementById('ri-new-avg').textContent = fmt(newAvg) + ' ر.س';
+  document.getElementById('reinvest-result').style.display = 'block';
+}
+
+function confirmDividend() {
+  const sym = document.getElementById('div-symbol').value;
+  if (!sym) return showToast('اختر السهم', 'error');
+  const h = state.holdings[sym];
+  const perShare = parseFloat(document.getElementById('div-per-share').value) || 0;
+  if (perShare <= 0) return showToast('أدخل قيمة التوزيع للسهم', 'error');
+  const exDate = document.getElementById('div-exdate').value;
+  const payDate = document.getElementById('div-paydate').value;
+  const eligible = parseInt(document.getElementById('div-eligible').textContent.replace(/,/g,'')) || 0;
+  const total = eligible * perShare;
+  const reinvest = document.getElementById('div-reinvest').checked;
+  const riPrice = parseFloat(document.getElementById('div-reinvest-price').value) || 0;
+
+  let addedShares = 0, newAvg = h.avgCost;
+  if (reinvest) {
+    if (!riPrice) return showToast('أدخل سعر إعادة الاستثمار', 'error');
+    addedShares = total / riPrice;
+    newAvg = (h.shares * h.avgCost + total) / (h.shares + addedShares);
+    h.avgCost = newAvg;
+    h.shares += addedShares;
+    state.transactions.push({
+      id: uid(), type: 'reinvest', symbol: sym,
+      shares: addedShares, price: riPrice, total,
+      date: payDate || exDate, note: `إعادة استثمار توزيعات`
+    });
+  } else {
+    state.cash += total;
+  }
+
+  state.dividends.push({
+    id: uid(), symbol: sym, perShare, exDate, payDate,
+    eligibleShares: eligible, totalAmount: total,
+    reinvested: reinvest, addedShares, reinvestPrice: riPrice
+  });
+
+  state.transactions.push({
+    id: uid(), type: 'dividend', symbol: sym,
+    shares: eligible, price: perShare, total,
+    date: payDate || exDate, note: `توزيع ${fmt(perShare)} ر.س للسهم`
+  });
+
+  saveState();
+  closeModal('modal-dividend');
+  renderAll();
+  showToast(`تم تسجيل توزيع ${fmt(total)} ر.س من ${SAUDI_STOCKS[sym]||sym}`, 'success');
+}
+
+// ========================================================
+//  HISTORY MODAL
+// ========================================================
+function openHistoryModal(sym) {
+  const h = state.holdings[sym];
+  const txs = state.transactions.filter(t => t.symbol === sym).sort((a, b) => new Date(b.date) - new Date(a.date));
+  const p = priceCache[sym];
+  const price = p?.price || h?.avgCost || 0;
+
+  document.getElementById('history-title').textContent = `${sym} — ${SAUDI_STOCKS[sym] || sym}`;
+
+  const typeLabel = { buy:'<span class="tx-chip tx-buy">شراء</span>', sell:'<span class="tx-chip tx-sell">بيع</span>', dividend:'<span class="tx-chip tx-dividend">توزيع</span>', reinvest:'<span class="tx-chip tx-reinvest">إعادة استثمار</span>' };
+
+  const rows = txs.map(t => `
+    <tr>
+      <td style="color:var(--text-2);font-size:0.8rem">${t.date}</td>
+      <td>${typeLabel[t.type]||t.type}</td>
+      <td style="direction:ltr;text-align:right">${fmtN(t.shares||0)}</td>
+      <td style="direction:ltr;text-align:right">${t.price?fmt(t.price):'—'}</td>
+      <td style="direction:ltr;text-align:right;font-weight:700">${t.total?fmt(t.total):'—'}</td>
+      <td style="font-size:0.78rem;color:var(--text-2)">${t.note||''}</td>
+    </tr>`).join('') || '<tr><td colspan="6" style="text-align:center;padding:1.5rem;color:var(--text-3)">لا توجد عمليات</td></tr>';
+
+  const currentValue = h ? h.shares * price : 0;
+  const totalCost    = h ? h.shares * h.avgCost : 0;
+  const pnl          = currentValue - totalCost;
+  const pnlClr       = pnl >= 0 ? '#22c97a' : '#f0505a';
+  const holding      = h ? holdingPeriod(h.firstBuyDate) : '—';
+
+  document.getElementById('history-content').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.6rem;margin-bottom:1rem">
+      <div class="card" style="padding:0.75rem;text-align:center">
+        <div style="font-size:0.72rem;color:var(--text-2)">الأسهم</div>
+        <div style="font-weight:700;font-size:1.1rem;direction:ltr">${h ? fmtN(h.shares) : 0}</div>
+      </div>
+      <div class="card" style="padding:0.75rem;text-align:center">
+        <div style="font-size:0.72rem;color:var(--text-2)">متوسط التكلفة</div>
+        <div style="font-weight:700;font-size:1.1rem;direction:ltr">${h ? fmt(h.avgCost) : '—'}</div>
+      </div>
+      <div class="card" style="padding:0.75rem;text-align:center">
+        <div style="font-size:0.72rem;color:var(--text-2)">ر/خ غير محقق</div>
+        <div style="font-weight:700;font-size:1.1rem;direction:ltr;color:${pnlClr}">${pnl>=0?'+':''}${fmt(pnl)}</div>
+      </div>
+      <div class="card" style="padding:0.75rem;text-align:center">
+        <div style="font-size:0.72rem;color:var(--text-2)">مدة الاحتفاظ</div>
+        <div style="font-weight:700;font-size:1rem">${holding}</div>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>التاريخ</th><th>النوع</th><th>الكمية</th><th>السعر</th><th>الإجمالي</th><th>ملاحظة</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
+
+  openModal('modal-history');
+}
+
+// ========================================================
+//  DELETE OPERATIONS
+// ========================================================
+function deleteTransaction(id) {
+  if (!confirm('هل تريد حذف هذه العملية؟ لن يتم التراجع عن الحذف')) return;
+  state.transactions = state.transactions.filter(t => t.id !== id);
+  saveState();
+  renderAll();
+  showToast('تم حذف العملية', 'info');
+}
+
+function deleteDividend(id) {
+  if (!confirm('هل تريد حذف هذا التوزيع؟')) return;
+  state.dividends = state.dividends.filter(d => d.id !== id);
+  saveState();
+  renderAll();
+  showToast('تم حذف التوزيع', 'info');
+}
+
+// ========================================================
+//  CASH
+// ========================================================
+function saveCash() {
+  const val = parseFloat(document.getElementById('cash-input').value) || 0;
+  state.cash = val;
+  saveState();
+  renderAll();
+  showToast('تم حفظ الرصيد', 'success');
+}
+
+function openCashModal() {
+  document.getElementById('modal-cash-input').value = state.cash.toFixed(2);
+  openModal('modal-cash');
+}
+
+function saveModalCash() {
+  const val = parseFloat(document.getElementById('modal-cash-input').value) || 0;
+  state.cash = val;
+  saveState();
+  closeModal('modal-cash');
+  renderAll();
+  showToast('تم تحديث الكاش', 'success');
+}
+
+function saveSettings() {
+  state.settings.autoCash = document.getElementById('auto-cash-toggle').checked;
+  saveState();
+}
+
+// ========================================================
+//  EXPORT / IMPORT
+// ========================================================
+function exportData() {
+  const json = JSON.stringify({ ...state, exportedAt: new Date().toISOString(), version: '2.0' }, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `tasi-portfolio-${today()}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('تم تصدير البيانات بنجاح', 'success');
+}
+
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (!data.holdings && !data.transactions) throw new Error('صيغة غير صالحة');
+      if (!confirm(`هل تريد استيراد البيانات؟ سيتم الدمج مع البيانات الحالية`)) return;
+      // Merge
+      if (data.holdings) Object.assign(state.holdings, data.holdings);
+      if (data.transactions) state.transactions = [...state.transactions, ...data.transactions.filter(t => !state.transactions.find(ex => ex.id === t.id))];
+      if (data.dividends) state.dividends = [...state.dividends, ...data.dividends.filter(d => !state.dividends.find(ex => ex.id === d.id))];
+      if (data.cash != null) state.cash = data.cash;
+      if (data.settings) Object.assign(state.settings, data.settings);
+      saveState();
+      renderAll();
+      showToast('تم استيراد البيانات بنجاح', 'success');
+    } catch(err) {
+      showToast('خطأ في قراءة الملف: ' + err.message, 'error');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+function clearAllData() {
+  if (!confirm('تحذير! سيتم حذف جميع بياناتك نهائياً. هل أنت متأكد؟')) return;
+  if (!confirm('تأكيد أخير: مسح كل شيء؟')) return;
+  state = { holdings: {}, transactions: [], dividends: [], cash: 0, settings: { autoCash: false } };
+  saveState();
+  renderAll();
+  showToast('تم مسح جميع البيانات', 'info');
+}
+
+// ========================================================
+//  MODAL HELPERS
+// ========================================================
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ========================================================
+//  TOAST
+// ========================================================
+function showToast(msg, type = 'info') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.textContent = msg;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.3s';
+    setTimeout(() => toast.remove(), 300);
+  }, 3000);
+}
+
+// ========================================================
+//  UTILITIES
+// ========================================================
+function fmt(n, decimals = 2) {
+  if (n == null || isNaN(n)) return '—';
+  return Number(n).toLocaleString('en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+function fmtN(n) {
+  if (n == null || isNaN(n)) return '0';
+  return Number(n).toLocaleString('en-US', { maximumFractionDigits: 4 });
+}
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+
+// ========================================================
+//  SETTINGS SYNC
+// ========================================================
+function syncSettingsUI() {
+  document.getElementById('auto-cash-toggle').checked = state.settings.autoCash || false;
+}
+
+// ========================================================
+//  INIT
+// ========================================================
+(function init() {
+  loadState();
+  loadSahmkKey();
+  syncSettingsUI();
+  document.getElementById('add-date').value = today();
+  document.getElementById('sell-date').value = today();
+  document.getElementById('div-exdate').value = today();
+  document.getElementById('div-paydate').value = today();
+  renderAll();
+  const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
+  if (symbols.length > 0) setTimeout(() => refreshAllPrices(), 800);
+})();
+</script>
+</body>
+</html>
