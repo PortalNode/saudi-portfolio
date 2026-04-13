@@ -2494,9 +2494,12 @@ function renderTransactions() {
   const rows = txs.map(t => {
     const pnlColor  = t.pnl != null ? (t.pnl >= 0 ? '#22c97a' : '#f0505a') : '';
     const rowClass  = t.type === 'sell' && t.pnl != null ? (t.pnl > 0 ? 'row-win' : 'row-loss') : '';
-    const pnlBadge  = t.type === 'sell' && t.pnl != null
-      ? `<span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:0.76rem;font-weight:700;background:${t.pnl >= 0 ? 'rgba(34,201,122,0.12)' : 'rgba(240,80,90,0.12)'};color:${t.pnl >= 0 ? '#22c97a' : '#f0505a'}">${t.pnl >= 0 ? '▲ +' : '▼ '}${fmt(t.pnl)}</span>`
-      : '—';
+  let pnlBadge = '—';
+    if (t.type === 'sell' && t.pnl != null) {
+      const cost = t.total - t.pnl;
+      const pct = cost > 0 ? (t.pnl / cost) * 100 : 0;
+      pnlBadge = `<span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:0.76rem;font-weight:700;background:${t.pnl >= 0 ? 'rgba(34,201,122,0.12)' : 'rgba(240,80,90,0.12)'};color:${t.pnl >= 0 ? '#22c97a' : '#f0505a'}">${t.pnl >= 0 ? '▲ +' : '▼ '}${fmt(t.pnl)} (${fmt(Math.abs(pct), 2)}%)</span>`;
+    }
     return `
       <tr class="${rowClass}">
         <td style="color:var(--text-2);font-size:0.8rem">${t.date}</td>
@@ -2668,10 +2671,7 @@ function confirmAddStock() {
   h.shares += shares;
   if (!h.firstBuyDate || date < h.firstBuyDate) h.firstBuyDate = date;
 
-  // Auto deduct cash
-  if (state.settings.autoCash) {
-    state.cash = Math.max(0, state.cash - totalCost);
-  }
+state.cash = Math.max(0, state.cash - totalCost);
 
   // Log transaction
   state.transactions.push({
@@ -2749,9 +2749,7 @@ function confirmSell() {
   h.shares -= shares;
   if (h.shares <= 0) { h.shares = 0; }
 
-  if (state.settings.autoCash) {
-    state.cash += net;
-  }
+state.cash += net;
 
   state.transactions.push({
     id: uid(),
