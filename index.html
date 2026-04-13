@@ -689,47 +689,61 @@
     </div>
 
     <!-- ══ TASI Comparison Row ══ -->
-    <div class="card tasi-compare-card" style="padding:1rem 1.25rem;margin-bottom:1rem">
-      <div style="display:flex;align-items:center;gap:0.6rem;flex-shrink:0">
-        <span style="font-size:1.1rem">📈</span>
-        <div>
-          <div style="font-size:0.8rem;font-weight:700;color:var(--text-1)">مقارنة مع مؤشر تاسي</div>
-          <div style="font-size:0.68rem;color:var(--text-3)">بيانات فورية عبر SAHMK</div>
-        </div>
-        <span id="tasi-live-badge" style="display:none;font-size:0.65rem;background:rgba(34,201,122,0.15);color:var(--green);border:1px solid rgba(34,201,122,0.3);padding:2px 7px;border-radius:10px;font-weight:700">● مباشر</span>
-      </div>
+    <div class="card" style="padding:1.1rem 1.25rem;margin-bottom:1rem;background:var(--bg-card);border:1px solid var(--border)">
 
-      <div style="display:flex;gap:0.6rem;flex-wrap:wrap;flex:1;justify-content:center">
-        <div class="compare-block">
-          <div class="compare-label">🇸🇦 تاسي الآن</div>
-          <div class="compare-value text-blue" id="tasi-current">—</div>
-          <div class="compare-sub" id="tasi-change-today" style="color:var(--text-3)">—</div>
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.9rem">
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span style="font-size:1rem">📈</span>
+          <span style="font-size:0.88rem;font-weight:700;color:var(--text-1)">مقارنة أداء المحفظة بمؤشر تاسي</span>
+          <span id="tasi-live-badge" style="display:none;font-size:0.63rem;background:rgba(34,201,122,0.15);color:var(--green);border:1px solid rgba(34,201,122,0.25);padding:2px 8px;border-radius:10px;font-weight:700">● يدوي</span>
         </div>
-        <div class="compare-block">
-          <div class="compare-label">📅 تاسي منذ تأسيس محفظتك</div>
-          <div class="compare-value" id="tasi-since-val">—</div>
-          <div class="compare-sub text-muted" id="tasi-baseline-disp">أدخل قيمة التأسيس ←</div>
-        </div>
-        <div class="compare-block">
-          <div class="compare-label">💼 عائد محفظتي</div>
-          <div class="compare-value" id="portfolio-return-compare">—</div>
-          <div class="compare-sub text-muted" id="portfolio-return-sub">غير محقق</div>
-        </div>
-        <div class="compare-block" id="alpha-block">
-          <div class="compare-label">⚡ الأداء الزائد (ألفا)</div>
-          <div class="compare-value" id="alpha-val">—</div>
-          <div class="compare-sub" id="alpha-sub" style="color:var(--text-3)">مقارنة بتاسي</div>
+        <div style="display:flex;align-items:center;gap:0.5rem">
+          <span style="font-size:0.72rem;color:var(--text-3)">أدخل قيم تاسي يدوياً للمقارنة</span>
         </div>
       </div>
 
-      <div class="tasi-baseline-wrap" style="flex-shrink:0">
-        <span style="color:var(--text-2);white-space:nowrap">تاسي وقت البداية:</span>
-        <input type="number" id="tasi-baseline-input" class="tasi-baseline-input"
-          placeholder="مثال: 12500"
-          title="أدخل قيمة مؤشر تاسي عند بداية تتبع محفظتك لحساب الأداء الزائد"
-          oninput="saveTasiBaseline()">
-        <button class="btn btn-ghost btn-sm" onclick="fetchAndRenderTasi()" style="font-size:0.72rem;padding:0.25rem 0.6rem">⟳</button>
+      <!-- Metrics Grid -->
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0.65rem;margin-bottom:0.9rem">
+
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem;text-align:center">
+          <div style="font-size:0.68rem;color:var(--text-2);margin-bottom:0.3rem;font-weight:600">🇸🇦 تاسي الحالي</div>
+          <div style="font-size:1.15rem;font-weight:800;color:#4e9df0;direction:ltr" id="tasi-current">—</div>
+          <div style="font-size:0.7rem;margin-top:0.2rem" id="tasi-change-today" style="color:var(--text-3)">أدخل القيمة أدناه</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem;text-align:center">
+          <div style="font-size:0.68rem;color:var(--text-2);margin-bottom:0.3rem;font-weight:600">📅 تاسي منذ تأسيس المحفظة</div>
+          <div style="font-size:1.15rem;font-weight:800;direction:ltr" id="tasi-since-val">—</div>
+          <div style="font-size:0.7rem;margin-top:0.2rem;color:var(--text-3)" id="tasi-baseline-disp">أدخل قيمة البداية</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:0.75rem;text-align:center">
+          <div style="font-size:0.68rem;color:var(--text-2);margin-bottom:0.3rem;font-weight:600">💼 عائد محفظتي</div>
+          <div style="font-size:1.15rem;font-weight:800;direction:ltr" id="portfolio-return-compare">—</div>
+          <div style="font-size:0.7rem;margin-top:0.2rem;color:var(--text-3)" id="portfolio-return-sub">غير محقق</div>
+        </div>
+
+        <div style="background:var(--bg-elevated);border:1px solid rgba(232,160,32,0.2);border-radius:var(--radius-sm);padding:0.75rem;text-align:center">
+          <div style="font-size:0.68rem;color:var(--text-2);margin-bottom:0.3rem;font-weight:600">⚡ الأداء الزائد (ألفا)</div>
+          <div style="font-size:1.15rem;font-weight:800;direction:ltr" id="alpha-val">—</div>
+          <div style="font-size:0.7rem;margin-top:0.2rem" id="alpha-sub" style="color:var(--text-3)">مقارنة بتاسي</div>
+        </div>
+
       </div>
+
+      <!-- Inputs Row -->
+      <div style="display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;padding-top:0.75rem;border-top:1px solid var(--border)">
+        <div style="display:flex;align-items:center;gap:0.4rem">
+          <span style="font-size:0.75rem;color:var(--text-2);white-space:nowrap">تاسي وقت بداية المحفظة:</span>
+          <input type="number" id="tasi-baseline-input" class="tasi-baseline-input"
+            placeholder="مثال: 12500" oninput="saveTasiBaseline()"
+            style="width:100px;padding:0.3rem 0.5rem;background:var(--bg-input);border:1px solid var(--border-light);border-radius:6px;color:var(--text-1);font-size:0.8rem;direction:ltr;outline:none">
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="fetchAndRenderTasi()" style="padding:0.3rem 0.75rem;font-size:0.75rem">⟳ جلب تاسي من SAHMK</button>
+        <span style="font-size:0.7rem;color:var(--text-3)">💡 قيمة البداية: ابحث عن تاسي في أي تاريخ سابق عبر موقع تداول أو إنفستنج</span>
+      </div>
+
     </div>
 
     <!-- ══ Row 2: توزيع الأصول — full width ══ -->
@@ -763,13 +777,13 @@
     </div>
 
     <!-- ══ Row 3: Holdings table + Allocation ══ -->
-    <div style="display:grid;grid-template-columns:1fr 360px;gap:1rem" id="dash-body">
-      <div>
+    <div style="display:grid;grid-template-columns:1fr 360px;gap:1rem;align-items:start" id="dash-body">
+      <div style="display:flex;flex-direction:column">
         <div class="section-header">
           <div class="section-title">أبرز الأسهم <span>في محفظتك</span></div>
           <button class="btn btn-ghost btn-sm" onclick="switchTab('portfolio')">عرض الكل</button>
         </div>
-        <div class="table-wrap" id="top-holdings-wrap">
+        <div class="table-wrap" id="top-holdings-wrap" style="flex:1">
           <div class="empty-state">
             <div class="icon">📋</div>
             <p>لا توجد أسهم في محفظتك بعد</p>
@@ -778,7 +792,7 @@
         </div>
       </div>
 
-      <div>
+      <div style="display:flex;flex-direction:column">
         <div class="section-header" style="margin-bottom:0.6rem">
           <div class="section-title">توزيع <span>المحفظة</span></div>
           <div style="display:flex;gap:0.3rem">
@@ -786,7 +800,7 @@
             <button id="alloc-tab-stock"  class="inner-tab"        onclick="setAllocTab('stock')">الأسهم</button>
           </div>
         </div>
-        <div class="card" id="allocation-card" style="padding:1rem">
+        <div class="card" id="allocation-card" style="padding:1rem;flex:1;overflow-y:auto;max-height:520px">
           <div id="allocation-list">
             <div class="empty-state" style="padding:1.5rem">
               <p>أضف أسهماً لرؤية التوزيع</p>
@@ -1874,7 +1888,9 @@ function saveSahmkKey() {
 async function _sahmkFetch(symbol) {
   if (!sahmkApiKey) return null;
   try {
-    const r = await fetch(`https://app.sahmk.sa/api/v1/quote/${symbol}/`, {
+    const proxy = 'https://corsproxy.io/?';
+    const url = encodeURIComponent(`https://app.sahmk.sa/api/v1/quote/${symbol}/`);
+    const r = await fetch(proxy + url, {
       headers: { 'X-API-Key': sahmkApiKey, 'Accept': 'application/json' },
       signal: AbortSignal.timeout(12000)
     });
@@ -1909,7 +1925,9 @@ async function testSahmkConnection() {
   st.textContent = '⏳ جارٍ الاختبار...';
 
   try {
-    const r = await fetch('https://app.sahmk.sa/api/v1/quote/2222/', {
+    const proxy = 'https://corsproxy.io/?';
+    const url = encodeURIComponent('https://app.sahmk.sa/api/v1/quote/2222/');
+    const r = await fetch(proxy + url, {
       headers: { 'X-API-Key': key },
       signal: AbortSignal.timeout(12000)
     });
@@ -1921,7 +1939,7 @@ async function testSahmkConnection() {
     const d = await r.json();
     if (d?.price > 0) {
       st.style.cssText = 'display:block;padding:.75rem .9rem;border-radius:8px;font-size:.82rem;background:rgba(34,201,122,.12);color:#22c97a;border:1px solid rgba(34,201,122,.3)';
-      st.innerHTML = `✅ <strong>الاتصال ناجح!</strong> أرامكو: <strong>${d.price}</strong> ر.س &nbsp;|&nbsp; ${d.change_percent>=0?'+':''}${(d.change_percent||0).toFixed(2)}%`;
+      st.innerHTML = `✅ الاتصال ناجح أرامكو: ${d.price} ر.س`;
       sahmkApiKey = key;
       localStorage.setItem('tasi_sahmk_key', key);
     } else { throw new Error(); }
@@ -3088,79 +3106,56 @@ function uid() {
 }
 
 // ========================================================
-//  TASI INDEX — Yahoo Finance (^TASI) + SAHMK fallback
+//  TASI INDEX — SAHMK /market/summary/ (مجاني 100%)
 // ========================================================
-let tasiCache = null; // { price, change, pct, ts }
+let tasiCache = null;
 
 async function fetchTasiIndex() {
-  // ── محاولة 1: Yahoo Finance (مجاني بلا مفتاح) ──
+  if (!sahmkApiKey) return null;
   try {
-    const proxy = 'https://api.allorigins.win/raw?url=';
-    const yUrl  = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/%5ETASI?interval=1d&range=1d');
-    const r = await fetch(proxy + yUrl, { signal: AbortSignal.timeout(10000) });
-    if (r.ok) {
-      const d = await r.json();
-      const meta = d?.chart?.result?.[0]?.meta;
-      if (meta?.regularMarketPrice > 1000) {
-        const price = meta.regularMarketPrice;
-        const prev  = meta.chartPreviousClose || meta.previousClose || price;
-        tasiCache = {
-          price,
-          change: price - prev,
-          pct:    prev ? ((price - prev) / prev) * 100 : 0,
-          source: 'yahoo',
-          ts:     Date.now()
-        };
-        return tasiCache;
-      }
-    }
-  } catch(e) {}
-
-  // ── محاولة 2: SAHMK API (إذا توفر المفتاح) ──
-  if (sahmkApiKey) {
-    const symbols = ['TASI', '.TASI', '0000'];
-    for (const sym of symbols) {
-      try {
-        const r = await fetch(`https://app.sahmk.sa/api/v1/quote/${sym}/`, {
-          headers: { 'X-API-Key': sahmkApiKey, 'Accept': 'application/json' },
-          signal: AbortSignal.timeout(8000)
-        });
-        if (!r.ok) continue;
-        const d = await r.json();
-        if (d?.price && d.price > 1000) {
-          const prev = d.previous_close || d.price;
-          tasiCache = {
-            price:  d.price,
-            change: d.change || (d.price - prev),
-            pct:    d.change_percent || (prev ? (d.price - prev) / prev * 100 : 0),
-            source: 'sahmk',
-            ts:     Date.now()
-          };
-          return tasiCache;
-        }
-      } catch(e) { continue; }
-    }
-  }
-
-  return null;
+    const proxy = 'https://corsproxy.io/?';
+    const url = encodeURIComponent('https://app.sahmk.sa/api/v1/market/summary/?index=TASI');
+    const r = await fetch(proxy + url, {
+      headers: { 'X-API-Key': sahmkApiKey, 'Accept': 'application/json' },
+      signal: AbortSignal.timeout(12000)
+    });
+    if (r.status === 401) { showToast('❌ مفتاح API غير صحيح', 'error'); return null; }
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (!d?.index_value || d.index_value <= 0) return null;
+    tasiCache = {
+      price:  d.index_value,
+      change: d.index_change         || 0,
+      pct:    d.index_change_percent  || 0,
+      source: 'sahmk',
+      ts:     Date.now()
+    };
+    return tasiCache;
+  } catch(e) { return null; }
 }
-
 async function fetchAndRenderTasi() {
   const st = document.getElementById('tasi-settings-status');
   if (st) {
-    st.style.display = 'block';
     st.style.cssText = 'display:block;padding:.6rem .9rem;border-radius:8px;font-size:.82rem;background:var(--bg-elevated);color:var(--text-2);border:1px solid var(--border);margin-top:.6rem';
-    st.textContent = '⏳ جارٍ جلب بيانات مؤشر تاسي...';
+    st.textContent = '⏳ جارٍ جلب قيمة مؤشر تاسي...';
+  }
+  if (!sahmkApiKey) {
+    if (st) {
+      st.style.cssText = 'display:block;padding:.6rem .9rem;border-radius:8px;font-size:.82rem;background:var(--red-dim);color:#f0505a;border:1px solid rgba(240,80,90,.3);margin-top:.6rem';
+      st.textContent = '❌ أدخل مفتاح SAHMK في قسم الإعدادات أولاً';
+    }
+    return;
   }
   const data = await fetchTasiIndex();
   renderTasiComparison(data);
   if (st) {
     if (data) {
       st.style.cssText = 'display:block;padding:.6rem .9rem;border-radius:8px;font-size:.82rem;background:rgba(34,201,122,.1);color:#22c97a;border:1px solid rgba(34,201,122,.3);margin-top:.6rem';
-      st.innerHTML = `✅ تاسي الآن: <strong>${fmt(data.price)}</strong> &nbsp;|&nbsp; التغيير: <strong style="color:${data.pct >= 0 ? '#22c97a' : '#f0505a'}">${data.pct >= 0 ? '+' : ''}${fmt(data.pct, 2)}%</strong>`;
+      const sign = data.pct >= 0 ? '+' : '';
+      st.innerHTML = `✅ تاسي الآن: <strong>${fmt(data.price)}</strong> نقطة &nbsp;|&nbsp; التغيير اليومي: <strong style="color:${data.pct >= 0 ? '#22c97a' : '#f0505a'}">${sign}${fmt(data.pct, 2)}%</strong>`;
     } else {
       st.style.cssText = 'display:block;padding:.6rem .9rem;border-radius:8px;font-size:.82rem;background:var(--red-dim);color:#f0505a;border:1px solid rgba(240,80,90,.3);margin-top:.6rem';
-      st.textContent = '❌ تعذّر جلب بيانات تاسي — تأكد من إدخال مفتاح SAHMK أولاً';
+      st.textContent = '❌ تعذّر جلب بيانات تاسي — تحقق من المفتاح والاتصال';
     }
   }
 }
@@ -3169,13 +3164,17 @@ function saveTasiBaseline() {
   const val = parseFloat(document.getElementById('tasi-baseline-input')?.value) || 0;
   if (val > 0) {
     state.settings.tasiBaseline = val;
-    // Sync settings input
     const si = document.getElementById('tasi-baseline-settings');
     if (si) si.value = val;
     saveState();
-    renderTasiComparison(tasiCache);
   }
+  renderTasiComparison(tasiCache);
 }
+
+function saveTasiCurrent() {
+  // تاسي الحالي يُجلب تلقائياً من SAHMK — لا حاجة للإدخال اليدوي
+}
+
 function saveTasiBaselineSettings() {
   const val = parseFloat(document.getElementById('tasi-baseline-settings')?.value) || 0;
   if (val > 0) {
@@ -3183,7 +3182,110 @@ function saveTasiBaselineSettings() {
     const bi = document.getElementById('tasi-baseline-input');
     if (bi) bi.value = val;
     saveState();
-    renderTasiComparison(tasiCache);
+  }
+  renderTasiComparison(tasiCache);
+}
+
+function renderTasiComparison(tasiData) {
+  const baseline = state.settings?.tasiBaseline || 0;
+
+  // Sync baseline inputs
+  const bi = document.getElementById('tasi-baseline-input');
+  const bs = document.getElementById('tasi-baseline-settings');
+  if (bi && baseline > 0 && !bi.value) bi.value = baseline;
+  if (bs && baseline > 0 && !bs.value) bs.value = baseline;
+
+  // Portfolio unrealized return %
+  let totalCost = 0, totalValue = 0;
+  for (const sym of Object.keys(state.holdings)) {
+    const h = state.holdings[sym];
+    if (h.shares <= 0) continue;
+    totalCost  += h.shares * h.avgCost;
+    totalValue += h.shares * (priceCache[sym]?.price || h.avgCost);
+  }
+  const portReturnPct = totalCost > 0 ? ((totalValue - totalCost) / totalCost) * 100 : null;
+
+  // TASI since baseline %
+  const tasiSincePct = (baseline > 0 && tasiData?.price)
+    ? ((tasiData.price - baseline) / baseline) * 100
+    : null;
+
+  // Alpha
+  const alpha = (portReturnPct != null && tasiSincePct != null)
+    ? portReturnPct - tasiSincePct
+    : null;
+
+  // ── Update DOM ──
+  const badge = document.getElementById('tasi-live-badge');
+  if (badge) {
+    badge.style.display = tasiData ? 'inline' : 'none';
+    badge.textContent = tasiData?.source === 'sahmk' ? '● مباشر' : '● يدوي';
+  }
+
+  const curEl = document.getElementById('tasi-current');
+  if (curEl) {
+    curEl.textContent = tasiData ? fmt(tasiData.price) : '—';
+    curEl.style.color = tasiData ? '#4e9df0' : 'var(--text-3)';
+  }
+
+  const chEl = document.getElementById('tasi-change-today');
+  if (chEl) {
+    if (tasiData) {
+      const s = tasiData.pct >= 0 ? '+' : '';
+      chEl.textContent = `${tasiData.pct >= 0 ? '▲' : '▼'} ${s}${fmt(tasiData.pct, 2)}% اليوم`;
+      chEl.style.color = tasiData.pct >= 0 ? '#22c97a' : '#f0505a';
+    } else {
+      chEl.textContent = 'اضغط ⟳ لجلب البيانات';
+      chEl.style.color = 'var(--text-3)';
+    }
+  }
+
+  const sinceEl  = document.getElementById('tasi-since-val');
+  const sinceDsp = document.getElementById('tasi-baseline-disp');
+  if (sinceEl) {
+    if (tasiSincePct != null) {
+      const sign = tasiSincePct >= 0 ? '+' : '';
+      sinceEl.textContent = `${sign}${fmt(tasiSincePct, 2)}%`;
+      sinceEl.style.color = tasiSincePct >= 0 ? '#22c97a' : '#f0505a';
+      if (sinceDsp) sinceDsp.textContent = `من ${fmt(baseline)} نقطة`;
+    } else {
+      sinceEl.textContent = '—';
+      sinceEl.style.color = 'var(--text-3)';
+      if (sinceDsp) sinceDsp.textContent = baseline > 0 ? 'في انتظار سعر تاسي' : 'أدخل قيمة بداية المحفظة ↓';
+    }
+  }
+
+  const portEl  = document.getElementById('portfolio-return-compare');
+  const portSub = document.getElementById('portfolio-return-sub');
+  if (portEl) {
+    if (portReturnPct != null) {
+      const sign = portReturnPct >= 0 ? '+' : '';
+      portEl.textContent = `${sign}${fmt(portReturnPct, 2)}%`;
+      portEl.style.color = portReturnPct >= 0 ? '#22c97a' : '#f0505a';
+    } else {
+      portEl.textContent = '—';
+      portEl.style.color = 'var(--text-3)';
+    }
+    if (portSub) portSub.textContent = totalCost > 0 ? `على ${fmt(totalCost)} ر.س` : 'لا توجد أسهم';
+  }
+
+  const alphaEl  = document.getElementById('alpha-val');
+  const alphaSub = document.getElementById('alpha-sub');
+  if (alphaEl) {
+    if (alpha != null) {
+      const sign = alpha >= 0 ? '+' : '';
+      alphaEl.textContent = `${sign}${fmt(alpha, 2)}%`;
+      alphaEl.style.color = alpha >= 0 ? '#22c97a' : '#f0505a';
+      alphaEl.parentElement.style.borderColor = alpha >= 0 ? 'rgba(34,201,122,0.25)' : 'rgba(240,80,90,0.25)';
+      if (alphaSub) {
+        alphaSub.textContent = alpha >= 0 ? '✅ تتفوق على تاسي' : '⚠️ أقل من تاسي';
+        alphaSub.style.color = alpha >= 0 ? '#22c97a' : '#f0505a';
+      }
+    } else {
+      alphaEl.textContent = '—';
+      alphaEl.style.color = 'var(--text-3)';
+      if (alphaSub) { alphaSub.textContent = 'أدخل بيانات المقارنة'; alphaSub.style.color = 'var(--text-3)'; }
+    }
   }
 }
 
@@ -3395,12 +3497,10 @@ function calcSellTotal() {
 // ========================================================
 function initTasiBaseline() {
   const baseline = state.settings?.tasiBaseline || 0;
-  if (baseline > 0) {
-    const bi = document.getElementById('tasi-baseline-input');
-    const bs = document.getElementById('tasi-baseline-settings');
-    if (bi) bi.value = baseline;
-    if (bs) bs.value = baseline;
-  }
+  const bi = document.getElementById('tasi-baseline-input');
+  const bs = document.getElementById('tasi-baseline-settings');
+  if (bi && baseline > 0) bi.value = baseline;
+  if (bs && baseline > 0) bs.value = baseline;
 }
 
 // ========================================================
@@ -3425,13 +3525,10 @@ function syncSettingsUI() {
   renderAll();
   const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
   if (symbols.length > 0) {
-    setTimeout(() => {
-      refreshAllPrices();
-      // Fetch TASI after stocks to avoid rate limit
-      setTimeout(() => fetchAndRenderTasi(), 3000);
-    }, 800);
+    setTimeout(() => refreshAllPrices(), 800);
+    setTimeout(() => fetchTasiIndex().then(d => { if(d) renderTasiComparison(d); }), 2500);
   } else if (sahmkApiKey) {
-    setTimeout(() => fetchAndRenderTasi(), 1500);
+    setTimeout(() => fetchTasiIndex().then(d => { if(d) renderTasiComparison(d); }), 1000);
   }
 })();
 </script>
