@@ -800,7 +800,11 @@
             <button id="alloc-tab-stock"  class="inner-tab"        onclick="setAllocTab('stock')">الأسهم</button>
           </div>
         </div>
-        <div class="card" id="allocation-card" style="padding:1rem;flex:1;overflow-y:auto;max-height:520px">
+      <div class="card" id="allocation-card" style="padding:1rem;flex:1;overflow-y:auto;max-height:520px">
+          <div style="display:flex;background:var(--bg-input);padding:0.25rem;border-radius:var(--radius-sm);margin-bottom:1rem;border:1px solid var(--border)">
+            <button id="alloc-method-value" class="nav-btn active" style="flex:1;text-align:center" onclick="setAllocMethod('value')">القيمة السوقية</button>
+            <button id="alloc-method-cost" class="nav-btn" style="flex:1;text-align:center" onclick="setAllocMethod('cost')">تكلفة الشراء</button>
+          </div>
           <div id="allocation-list">
             <div class="empty-state" style="padding:1.5rem">
               <p>أضف أسهماً لرؤية التوزيع</p>
@@ -2109,6 +2113,21 @@ function updateCashInput() {
 // ========================================================
 // ── Allocation tab state ──
 let _allocTab = 'sector'; // 'sector' | 'stock'
+let _allocMethod = 'value'; // 'value' | 'cost'
+
+function setAllocMethod(method) {
+  _allocMethod = method;
+  document.getElementById('alloc-method-value').classList.toggle('active', method === 'value');
+  document.getElementById('alloc-method-cost').classList.toggle('active', method === 'cost');
+  renderAllocation();
+}
+
+function setAllocTab(tab) {
+  _allocTab = tab;
+  document.getElementById('alloc-tab-sector').classList.toggle('active', tab === 'sector');
+  document.getElementById('alloc-tab-stock').classList.toggle('active',  tab === 'stock');
+  renderAllocation();
+}
 function setAllocTab(tab) {
   _allocTab = tab;
   document.getElementById('alloc-tab-sector').classList.toggle('active', tab === 'sector');
@@ -2183,7 +2202,7 @@ function renderDashboard() {
 
   // ── Sub-panels ──
   renderTopHoldings(totalStocksValue);
-  renderAllocation(totalStocksValue);
+  renderAllocation();
   renderTasiComparison(tasiCache);
 }
 
@@ -2247,10 +2266,18 @@ function renderTopHoldings(totalValue) {
     </table>`;
 }
 
-function renderAllocation(totalValue) {
+function renderAllocation() {
   const wrap    = document.getElementById('allocation-list');
   const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
-  const total   = totalValue + state.cash;
+
+  // حساب الإجمالي ديناميكياً بناءً على الخيار المحدد (قيمة سوقية أم تكلفة)
+  let totalValue = 0;
+  symbols.forEach(sym => {
+    const h = state.holdings[sym];
+    const price = _allocMethod === 'value' ? (priceCache[sym]?.price || h.avgCost) : h.avgCost;
+    totalValue += h.shares * price;
+  });
+  const total = totalValue + state.cash;
 
   if (symbols.length === 0 || total <= 0) {
     wrap.innerHTML = `<div class="empty-state" style="padding:1.5rem"><p>أضف أسهماً لرؤية التوزيع</p></div>`;
@@ -2259,13 +2286,13 @@ function renderAllocation(totalValue) {
 
   const COLORS = ['#4e9df0','#22c97a','#f0b429','#f0505a','#b066f0','#f07850','#50e0f0','#e8a020','#90c060','#ff7eb3','#56cfe1','#ffb347'];
 
-  // ── Sector view ──
+  // ── عرض القطاعات ──
   if (_allocTab === 'sector') {
-    // Group by sector
     const sectorMap = {};
     symbols.forEach(sym => {
       const h   = state.holdings[sym];
-      const val = h.shares * (priceCache[sym]?.price || h.avgCost);
+      const price = _allocMethod === 'value' ? (priceCache[sym]?.price || h.avgCost) : h.avgCost;
+      const val = h.shares * price;
       const sec = SAUDI_SECTORS[sym] || 'أخرى';
       sectorMap[sec] = (sectorMap[sec] || 0) + val;
     });
@@ -2290,7 +2317,6 @@ function renderAllocation(totalValue) {
         </div>`;
     }).join('');
 
-    // Cash row
     if (state.cash > 0) {
       const cashPct = total > 0 ? (state.cash / total * 100) : 0;
       html += `
@@ -2313,10 +2339,11 @@ function renderAllocation(totalValue) {
     wrap.innerHTML = html;
 
   } else {
-    // ── Individual stock view ──
+    // ── عرض الأسهم الفردية ──
     const items = symbols.map(sym => {
       const h   = state.holdings[sym];
-      const val = h.shares * (priceCache[sym]?.price || h.avgCost);
+      const price = _allocMethod === 'value' ? (priceCache[sym]?.price || h.avgCost) : h.avgCost;
+      const val = h.shares * price;
       return { sym, val };
     }).sort((a,b) => b.val - a.val);
 
