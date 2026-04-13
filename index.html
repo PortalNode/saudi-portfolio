@@ -527,6 +527,96 @@
 
     /* Animated number counter */
     .animated-num{transition:color 0.5s}
+
+    /* ===== TASI COMPARE SECTION ===== */
+    .tasi-compare-card{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:1rem;
+      background:linear-gradient(135deg,rgba(34,201,122,0.06),rgba(78,157,240,0.04));
+      border:1px solid rgba(34,201,122,0.2)!important;
+    }
+    .compare-block{
+      display:flex;flex-direction:column;align-items:center;
+      padding:0.5rem 1rem;
+      background:var(--bg-elevated);
+      border-radius:var(--radius-sm);
+      border:1px solid var(--border);
+      min-width:110px;text-align:center;
+    }
+    .compare-label{font-size:0.7rem;color:var(--text-2);margin-bottom:0.25rem;white-space:nowrap}
+    .compare-value{font-size:1.1rem;font-weight:800;line-height:1.2}
+    .compare-sub{font-size:0.73rem;margin-top:0.15rem}
+    .alpha-positive{color:var(--green)}
+    .alpha-negative{color:var(--red)}
+    .alpha-neutral{color:var(--text-2)}
+
+    /* ===== REALIZED P&L SUMMARY ===== */
+    .realized-summary-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:0.75rem;
+      margin-bottom:1rem;
+    }
+    @media(max-width:900px){.realized-summary-grid{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:500px){.realized-summary-grid{grid-template-columns:repeat(2,1fr)}}
+    .rs-card{
+      background:var(--bg-card);
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      padding:0.85rem 1rem;
+      text-align:center;
+    }
+    .rs-label{font-size:0.72rem;color:var(--text-2);margin-bottom:0.3rem}
+    .rs-value{font-size:1.05rem;font-weight:800}
+    .rs-sub{font-size:0.7rem;color:var(--text-3);margin-top:0.15rem}
+
+    /* ===== TRADE FILTER TABS ===== */
+    .trade-filter-tabs{
+      display:flex;gap:0.4rem;margin-bottom:0.75rem;flex-wrap:wrap;
+    }
+    .trade-tab{
+      padding:0.4rem 1rem;
+      border:1px solid var(--border);
+      border-radius:20px;
+      background:var(--bg-elevated);
+      color:var(--text-2);
+      font-family:'Tajawal',sans-serif;
+      font-size:0.82rem;font-weight:600;
+      cursor:pointer;transition:all 0.2s;
+    }
+    .trade-tab:hover{border-color:var(--text-3);color:var(--text-1)}
+    .trade-tab.active-all{background:var(--bg-card);color:var(--text-1);border-color:var(--text-3)}
+    .trade-tab.active-win{background:rgba(34,201,122,0.12);color:var(--green);border-color:rgba(34,201,122,0.4)}
+    .trade-tab.active-loss{background:rgba(240,80,90,0.12);color:var(--red);border-color:rgba(240,80,90,0.4)}
+    .trade-tab.active-div{background:var(--accent-glow);color:var(--accent);border-color:rgba(232,160,32,0.4)}
+
+    /* ===== TASI BASELINE INPUT ===== */
+    .tasi-baseline-wrap{
+      display:flex;align-items:center;gap:0.4rem;
+      background:var(--bg-elevated);
+      border:1px solid var(--border);
+      border-radius:var(--radius-sm);
+      padding:0.4rem 0.75rem;
+      font-size:0.75rem;
+    }
+    .tasi-baseline-input{
+      width:90px;padding:0.2rem 0.4rem;
+      background:var(--bg-input);
+      border:1px solid var(--border-light);
+      border-radius:5px;
+      color:var(--text-1);
+      font-family:'Tajawal',sans-serif;font-size:0.8rem;
+      direction:ltr;outline:none;
+      transition:border-color 0.2s;
+    }
+    .tasi-baseline-input:focus{border-color:var(--accent)}
+
+    /* Trade row highlight */
+    tr.row-win td:first-child{border-right:3px solid var(--green)}
+    tr.row-loss td:first-child{border-right:3px solid var(--red)}
   </style>
 </head>
 <body>
@@ -595,6 +685,50 @@
         <div class="stat-value text-accent" id="total-dividends">0.00</div>
         <div class="stat-sub text-muted">ر.س إجمالي</div>
         <div class="stat-icon">🏦</div>
+      </div>
+    </div>
+
+    <!-- ══ TASI Comparison Row ══ -->
+    <div class="card tasi-compare-card" style="padding:1rem 1.25rem;margin-bottom:1rem">
+      <div style="display:flex;align-items:center;gap:0.6rem;flex-shrink:0">
+        <span style="font-size:1.1rem">📈</span>
+        <div>
+          <div style="font-size:0.8rem;font-weight:700;color:var(--text-1)">مقارنة مع مؤشر تاسي</div>
+          <div style="font-size:0.68rem;color:var(--text-3)">بيانات فورية عبر SAHMK</div>
+        </div>
+        <span id="tasi-live-badge" style="display:none;font-size:0.65rem;background:rgba(34,201,122,0.15);color:var(--green);border:1px solid rgba(34,201,122,0.3);padding:2px 7px;border-radius:10px;font-weight:700">● مباشر</span>
+      </div>
+
+      <div style="display:flex;gap:0.6rem;flex-wrap:wrap;flex:1;justify-content:center">
+        <div class="compare-block">
+          <div class="compare-label">🇸🇦 تاسي الآن</div>
+          <div class="compare-value text-blue" id="tasi-current">—</div>
+          <div class="compare-sub" id="tasi-change-today" style="color:var(--text-3)">—</div>
+        </div>
+        <div class="compare-block">
+          <div class="compare-label">📅 تاسي منذ تأسيس محفظتك</div>
+          <div class="compare-value" id="tasi-since-val">—</div>
+          <div class="compare-sub text-muted" id="tasi-baseline-disp">أدخل قيمة التأسيس ←</div>
+        </div>
+        <div class="compare-block">
+          <div class="compare-label">💼 عائد محفظتي</div>
+          <div class="compare-value" id="portfolio-return-compare">—</div>
+          <div class="compare-sub text-muted" id="portfolio-return-sub">غير محقق</div>
+        </div>
+        <div class="compare-block" id="alpha-block">
+          <div class="compare-label">⚡ الأداء الزائد (ألفا)</div>
+          <div class="compare-value" id="alpha-val">—</div>
+          <div class="compare-sub" id="alpha-sub" style="color:var(--text-3)">مقارنة بتاسي</div>
+        </div>
+      </div>
+
+      <div class="tasi-baseline-wrap" style="flex-shrink:0">
+        <span style="color:var(--text-2);white-space:nowrap">تاسي وقت البداية:</span>
+        <input type="number" id="tasi-baseline-input" class="tasi-baseline-input"
+          placeholder="مثال: 12500"
+          title="أدخل قيمة مؤشر تاسي عند بداية تتبع محفظتك لحساب الأداء الزائد"
+          oninput="saveTasiBaseline()">
+        <button class="btn btn-ghost btn-sm" onclick="fetchAndRenderTasi()" style="font-size:0.72rem;padding:0.25rem 0.6rem">⟳</button>
       </div>
     </div>
 
@@ -699,6 +833,45 @@
         </select>
       </div>
     </div>
+
+    <!-- Realized P&L Summary Cards -->
+    <div class="realized-summary-grid" id="realized-summary-grid">
+      <div class="rs-card" style="border-color:rgba(34,201,122,0.25)">
+        <div class="rs-label">💰 إجمالي الأرباح المحققة</div>
+        <div class="rs-value text-green" id="rs-total-win">0.00 ر.س</div>
+        <div class="rs-sub" id="rs-win-count">0 صفقة</div>
+      </div>
+      <div class="rs-card" style="border-color:rgba(240,80,90,0.25)">
+        <div class="rs-label">📉 إجمالي الخسائر المحققة</div>
+        <div class="rs-value text-red" id="rs-total-loss">0.00 ر.س</div>
+        <div class="rs-sub" id="rs-loss-count">0 صفقة</div>
+      </div>
+      <div class="rs-card" style="border-color:rgba(232,160,32,0.2)">
+        <div class="rs-label">📊 صافي الربح المحقق</div>
+        <div class="rs-value" id="rs-net-pnl">0.00 ر.س</div>
+        <div class="rs-sub" id="rs-net-pct">—</div>
+      </div>
+      <div class="rs-card">
+        <div class="rs-label">🎯 نسبة نجاح الصفقات</div>
+        <div class="rs-value text-accent" id="rs-win-rate">—</div>
+        <div class="rs-sub" id="rs-trades-total">0 صفقة مغلقة</div>
+      </div>
+      <div class="rs-card" style="border-color:rgba(78,157,240,0.2)">
+        <div class="rs-label">⚖️ متوسط الربح / الخسارة</div>
+        <div class="rs-value text-blue" id="rs-avg-pnl">—</div>
+        <div class="rs-sub">لكل صفقة مغلقة</div>
+      </div>
+    </div>
+
+    <!-- Trade Filter Tabs -->
+    <div class="trade-filter-tabs">
+      <button id="ttab-all"  class="trade-tab active-all" onclick="setTradeTab('all')">📋 كل العمليات</button>
+      <button id="ttab-win"  class="trade-tab"            onclick="setTradeTab('win')">🟢 الصفقات الرابحة</button>
+      <button id="ttab-loss" class="trade-tab"            onclick="setTradeTab('loss')">🔴 الصفقات الخاسرة</button>
+      <button id="ttab-buy"  class="trade-tab"            onclick="setTradeTab('buy')">🛒 الشراء</button>
+      <button id="ttab-div"  class="trade-tab"            onclick="setTradeTab('div')">💰 التوزيعات</button>
+    </div>
+
     <div class="table-wrap" id="tx-table-wrap">
       <div class="empty-state">
         <div class="icon">📒</div>
@@ -757,7 +930,28 @@
       <button class="btn btn-primary" onclick="refreshAllPrices()" style="width:100%">⟳ تحديث الأسعار الآن</button>
     </div>
 
-        <!-- ════ Cash Management ════ -->
+    <!-- ════ TASI Baseline ════ -->
+    <div class="card mb-3" style="border-color:rgba(78,157,240,0.2)">
+      <div class="section-title mb-3" style="color:var(--blue)">📈 مقارنة تاسي — قيمة التأسيس</div>
+      <div style="font-size:0.82rem;color:var(--text-2);margin-bottom:0.75rem;line-height:1.7">
+        أدخل قيمة مؤشر تاسي في اليوم الذي بدأت فيه تتبع محفظتك، وستظهر لك مقارنة تلقائية بين أداء محفظتك وأداء المؤشر منذ ذلك اليوم.
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label">قيمة تاسي عند بداية تتبع المحفظة</label>
+          <input type="number" class="form-control" id="tasi-baseline-settings"
+            placeholder="مثال: 12500" step="0.01" style="direction:ltr"
+            oninput="saveTasiBaselineSettings()">
+          <p class="form-hint mt-1">يمكنك البحث عن قيمة تاسي في أي يوم سابق عبر موقع تداول أو إنفستنج</p>
+        </div>
+        <div style="display:flex;align-items:flex-end">
+          <button class="btn btn-blue w-full" onclick="fetchAndRenderTasi()">⟳ جلب تاسي الآن</button>
+        </div>
+      </div>
+      <div id="tasi-settings-status" style="display:none;margin-top:0.6rem;padding:0.6rem 0.9rem;border-radius:8px;font-size:0.82rem"></div>
+    </div>
+
+    <!-- ════ Cash Management ════ -->
     <div class="card mb-3">
       <div class="section-title mb-3">💵 إدارة الكاش</div>
       <div class="form-row">
@@ -917,9 +1111,14 @@
         <span class="font-bold" id="sell-net">0.00 ر.س</span>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-top:0.3rem">
-        <span class="text-muted">الربح / الخسارة</span>
+        <span class="text-muted">الربح / الخسارة المحقق</span>
         <span class="font-bold" id="sell-pnl">0.00 ر.س</span>
       </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-top:0.3rem">
+        <span class="text-muted">نسبة العائد</span>
+        <span class="font-bold" id="sell-pnl-pct">—</span>
+      </div>
+      <div id="sell-verdict" style="display:none;margin-top:0.6rem;padding:0.5rem 0.75rem;border-radius:7px;font-size:0.82rem;font-weight:700;text-align:center"></div>
     </div>
     <input type="hidden" id="sell-symbol">
     <div style="display:flex;gap:0.6rem;margin-top:1.25rem">
@@ -1675,7 +1874,7 @@ function saveSahmkKey() {
 async function _sahmkFetch(symbol) {
   if (!sahmkApiKey) return null;
   try {
-   const r = await fetch(`https://corsproxy.io/?https://app.sahmk.sa/api/v1/quote/${symbol}/`, {
+    const r = await fetch(`https://app.sahmk.sa/api/v1/quote/${symbol}/`, {
       headers: { 'X-API-Key': sahmkApiKey, 'Accept': 'application/json' },
       signal: AbortSignal.timeout(12000)
     });
@@ -1710,7 +1909,7 @@ async function testSahmkConnection() {
   st.textContent = '⏳ جارٍ الاختبار...';
 
   try {
-    const r = await fetch('https://corsproxy.io/?https://app.sahmk.sa/api/v1/quote/2222/', {
+    const r = await fetch('https://app.sahmk.sa/api/v1/quote/2222/', {
       headers: { 'X-API-Key': key },
       signal: AbortSignal.timeout(12000)
     });
@@ -1967,6 +2166,7 @@ function renderDashboard() {
   // ── Sub-panels ──
   renderTopHoldings(totalStocksValue);
   renderAllocation(totalStocksValue);
+  renderTasiComparison(tasiCache);
 }
 
 function renderTopHoldings(totalValue) {
@@ -2230,8 +2430,9 @@ function renderPortfolioTable() {
 //  TRANSACTIONS TABLE
 // ========================================================
 function renderTransactions() {
+  renderRealizedSummary();
+
   const wrap = document.getElementById('tx-table-wrap');
-  const filterType = document.getElementById('tx-filter-type')?.value || '';
   const filterSym = document.getElementById('tx-filter-sym')?.value || '';
 
   // Update symbol filter dropdown
@@ -2243,37 +2444,63 @@ function renderTransactions() {
   }
 
   let txs = [...state.transactions];
+
+  // Apply trade tab filter first
+  if (_tradeTab === 'win')  txs = txs.filter(t => t.type === 'sell' && t.pnl > 0);
+  else if (_tradeTab === 'loss') txs = txs.filter(t => t.type === 'sell' && t.pnl <= 0);
+  else if (_tradeTab === 'buy')  txs = txs.filter(t => t.type === 'buy');
+  else if (_tradeTab === 'div')  txs = txs.filter(t => t.type === 'dividend' || t.type === 'reinvest');
+
+  // Then apply dropdown filter (type + symbol)
+  const filterType = document.getElementById('tx-filter-type')?.value || '';
   if (filterType) txs = txs.filter(t => t.type === filterType);
-  if (filterSym) txs = txs.filter(t => t.symbol === filterSym);
+  if (filterSym)  txs = txs.filter(t => t.symbol === filterSym);
+
   txs.sort((a, b) => new Date(b.date) - new Date(a.date));
 
   if (txs.length === 0) {
-    wrap.innerHTML = `<div class="empty-state"><div class="icon">📒</div><p>لا توجد عمليات مسجلة</p></div>`;
+    let emptyMsg = 'لا توجد عمليات مسجلة';
+    if (_tradeTab === 'win')  emptyMsg = '🟢 لا توجد صفقات رابحة بعد';
+    if (_tradeTab === 'loss') emptyMsg = '🔴 لا توجد صفقات خاسرة — عمل ممتاز!';
+    wrap.innerHTML = `<div class="empty-state"><div class="icon">📒</div><p>${emptyMsg}</p></div>`;
     return;
   }
 
-  const typeLabel = { buy:'<span class="tx-chip tx-buy">🟢 شراء</span>', sell:'<span class="tx-chip tx-sell">🔴 بيع</span>', dividend:'<span class="tx-chip tx-dividend">💰 توزيع</span>', reinvest:'<span class="tx-chip tx-reinvest">🔁 إعادة استثمار</span>' };
+  const typeLabel = {
+    buy:     '<span class="tx-chip tx-buy">🟢 شراء</span>',
+    sell:    '<span class="tx-chip tx-sell">🔴 بيع</span>',
+    dividend:'<span class="tx-chip tx-dividend">💰 توزيع</span>',
+    reinvest:'<span class="tx-chip tx-reinvest">🔁 إعادة استثمار</span>'
+  };
 
-  const rows = txs.map(t => `
-    <tr>
-      <td style="color:var(--text-2);font-size:0.8rem">${t.date}</td>
-      <td>${typeLabel[t.type] || t.type}</td>
-      <td><span class="symbol-badge">${t.symbol}</span></td>
-      <td style="font-size:0.8rem;color:var(--text-2)">${SAUDI_STOCKS[t.symbol]||''}</td>
-      <td style="direction:ltr;text-align:right">${fmtN(t.shares || 0)}</td>
-      <td style="direction:ltr;text-align:right">${t.price ? fmt(t.price) : '—'}</td>
-      <td style="direction:ltr;text-align:right;font-weight:700">${t.total ? fmt(t.total) : '—'}</td>
-      <td style="color:var(--text-2);font-size:0.78rem">${t.note || ''}</td>
-      <td>
-        <button class="btn btn-red btn-sm" onclick="deleteTransaction('${t.id}')">حذف</button>
-      </td>
-    </tr>`).join('');
+  const rows = txs.map(t => {
+    const pnlColor  = t.pnl != null ? (t.pnl >= 0 ? '#22c97a' : '#f0505a') : '';
+    const rowClass  = t.type === 'sell' && t.pnl != null ? (t.pnl > 0 ? 'row-win' : 'row-loss') : '';
+    const pnlBadge  = t.type === 'sell' && t.pnl != null
+      ? `<span style="display:inline-flex;align-items:center;padding:2px 8px;border-radius:6px;font-size:0.76rem;font-weight:700;background:${t.pnl >= 0 ? 'rgba(34,201,122,0.12)' : 'rgba(240,80,90,0.12)'};color:${t.pnl >= 0 ? '#22c97a' : '#f0505a'}">${t.pnl >= 0 ? '▲ +' : '▼ '}${fmt(t.pnl)}</span>`
+      : '—';
+    return `
+      <tr class="${rowClass}">
+        <td style="color:var(--text-2);font-size:0.8rem">${t.date}</td>
+        <td>${typeLabel[t.type] || t.type}</td>
+        <td><span class="symbol-badge">${t.symbol}</span></td>
+        <td style="font-size:0.8rem;color:var(--text-2)">${SAUDI_STOCKS[t.symbol]||''}</td>
+        <td style="direction:ltr;text-align:right">${fmtN(t.shares || 0)}</td>
+        <td style="direction:ltr;text-align:right">${t.price ? fmt(t.price) : '—'}</td>
+        <td style="direction:ltr;text-align:right;font-weight:700">${t.total ? fmt(t.total) : '—'}</td>
+        <td>${pnlBadge}</td>
+        <td style="color:var(--text-2);font-size:0.78rem">${t.note || ''}</td>
+        <td>
+          <button class="btn btn-red btn-sm" onclick="deleteTransaction('${t.id}')">حذف</button>
+        </td>
+      </tr>`;
+  }).join('');
 
   wrap.innerHTML = `
     <table>
       <thead><tr>
         <th>التاريخ</th><th>النوع</th><th>الرمز</th><th>السهم</th>
-        <th>الكمية</th><th>السعر</th><th>الإجمالي</th><th>ملاحظة</th><th></th>
+        <th>الكمية</th><th>السعر</th><th>الإجمالي</th><th>الربح/الخسارة</th><th>ملاحظة</th><th></th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table>`;
@@ -2861,6 +3088,322 @@ function uid() {
 }
 
 // ========================================================
+//  TASI INDEX — Yahoo Finance (^TASI) + SAHMK fallback
+// ========================================================
+let tasiCache = null; // { price, change, pct, ts }
+
+async function fetchTasiIndex() {
+  // ── محاولة 1: Yahoo Finance (مجاني بلا مفتاح) ──
+  try {
+    const proxy = 'https://api.allorigins.win/raw?url=';
+    const yUrl  = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/%5ETASI?interval=1d&range=1d');
+    const r = await fetch(proxy + yUrl, { signal: AbortSignal.timeout(10000) });
+    if (r.ok) {
+      const d = await r.json();
+      const meta = d?.chart?.result?.[0]?.meta;
+      if (meta?.regularMarketPrice > 1000) {
+        const price = meta.regularMarketPrice;
+        const prev  = meta.chartPreviousClose || meta.previousClose || price;
+        tasiCache = {
+          price,
+          change: price - prev,
+          pct:    prev ? ((price - prev) / prev) * 100 : 0,
+          source: 'yahoo',
+          ts:     Date.now()
+        };
+        return tasiCache;
+      }
+    }
+  } catch(e) {}
+
+  // ── محاولة 2: SAHMK API (إذا توفر المفتاح) ──
+  if (sahmkApiKey) {
+    const symbols = ['TASI', '.TASI', '0000'];
+    for (const sym of symbols) {
+      try {
+        const r = await fetch(`https://app.sahmk.sa/api/v1/quote/${sym}/`, {
+          headers: { 'X-API-Key': sahmkApiKey, 'Accept': 'application/json' },
+          signal: AbortSignal.timeout(8000)
+        });
+        if (!r.ok) continue;
+        const d = await r.json();
+        if (d?.price && d.price > 1000) {
+          const prev = d.previous_close || d.price;
+          tasiCache = {
+            price:  d.price,
+            change: d.change || (d.price - prev),
+            pct:    d.change_percent || (prev ? (d.price - prev) / prev * 100 : 0),
+            source: 'sahmk',
+            ts:     Date.now()
+          };
+          return tasiCache;
+        }
+      } catch(e) { continue; }
+    }
+  }
+
+  return null;
+}
+
+async function fetchAndRenderTasi() {
+  const st = document.getElementById('tasi-settings-status');
+  if (st) {
+    st.style.display = 'block';
+    st.style.cssText = 'display:block;padding:.6rem .9rem;border-radius:8px;font-size:.82rem;background:var(--bg-elevated);color:var(--text-2);border:1px solid var(--border);margin-top:.6rem';
+    st.textContent = '⏳ جارٍ جلب بيانات مؤشر تاسي...';
+  }
+  const data = await fetchTasiIndex();
+  renderTasiComparison(data);
+  if (st) {
+    if (data) {
+      st.style.cssText = 'display:block;padding:.6rem .9rem;border-radius:8px;font-size:.82rem;background:rgba(34,201,122,.1);color:#22c97a;border:1px solid rgba(34,201,122,.3);margin-top:.6rem';
+      st.innerHTML = `✅ تاسي الآن: <strong>${fmt(data.price)}</strong> &nbsp;|&nbsp; التغيير: <strong style="color:${data.pct >= 0 ? '#22c97a' : '#f0505a'}">${data.pct >= 0 ? '+' : ''}${fmt(data.pct, 2)}%</strong>`;
+    } else {
+      st.style.cssText = 'display:block;padding:.6rem .9rem;border-radius:8px;font-size:.82rem;background:var(--red-dim);color:#f0505a;border:1px solid rgba(240,80,90,.3);margin-top:.6rem';
+      st.textContent = '❌ تعذّر جلب بيانات تاسي — تأكد من إدخال مفتاح SAHMK أولاً';
+    }
+  }
+}
+
+function saveTasiBaseline() {
+  const val = parseFloat(document.getElementById('tasi-baseline-input')?.value) || 0;
+  if (val > 0) {
+    state.settings.tasiBaseline = val;
+    // Sync settings input
+    const si = document.getElementById('tasi-baseline-settings');
+    if (si) si.value = val;
+    saveState();
+    renderTasiComparison(tasiCache);
+  }
+}
+function saveTasiBaselineSettings() {
+  const val = parseFloat(document.getElementById('tasi-baseline-settings')?.value) || 0;
+  if (val > 0) {
+    state.settings.tasiBaseline = val;
+    const bi = document.getElementById('tasi-baseline-input');
+    if (bi) bi.value = val;
+    saveState();
+    renderTasiComparison(tasiCache);
+  }
+}
+
+function renderTasiComparison(tasiData) {
+  const baseline = state.settings?.tasiBaseline || 0;
+
+  // Sync baseline inputs
+  const bi = document.getElementById('tasi-baseline-input');
+  const bs = document.getElementById('tasi-baseline-settings');
+  if (bi && baseline > 0) bi.value = baseline;
+  if (bs && baseline > 0) bs.value = baseline;
+
+  // Portfolio unrealized return %
+  let totalCost = 0, totalValue = 0;
+  for (const sym of Object.keys(state.holdings)) {
+    const h = state.holdings[sym];
+    if (h.shares <= 0) continue;
+    totalCost  += h.shares * h.avgCost;
+    totalValue += h.shares * (priceCache[sym]?.price || h.avgCost);
+  }
+  const portReturnPct = totalCost > 0 ? ((totalValue - totalCost) / totalCost) * 100 : null;
+
+  // TASI since baseline %
+  const tasiSincePct = (baseline > 0 && tasiData?.price)
+    ? ((tasiData.price - baseline) / baseline) * 100
+    : null;
+
+  // Alpha
+  const alpha = (portReturnPct != null && tasiSincePct != null)
+    ? portReturnPct - tasiSincePct
+    : null;
+
+  // ── Update DOM ──
+  const badge = document.getElementById('tasi-live-badge');
+  if (badge) badge.style.display = tasiData ? 'inline' : 'none';
+
+  const curEl = document.getElementById('tasi-current');
+  if (curEl) {
+    curEl.textContent = tasiData ? fmt(tasiData.price) : '—';
+    curEl.style.color = tasiData ? '#4e9df0' : 'var(--text-3)';
+  }
+
+  const chEl = document.getElementById('tasi-change-today');
+  if (chEl) {
+    if (tasiData) {
+      const sign = tasiData.pct >= 0 ? '+' : '';
+      chEl.textContent = `${tasiData.pct >= 0 ? '▲' : '▼'} ${sign}${fmt(tasiData.pct, 2)}%`;
+      chEl.style.color = tasiData.pct >= 0 ? '#22c97a' : '#f0505a';
+    } else {
+      chEl.textContent = 'لم يتم جلب البيانات';
+      chEl.style.color = 'var(--text-3)';
+    }
+  }
+
+  const sinceEl = document.getElementById('tasi-since-val');
+  const sinceDsp = document.getElementById('tasi-baseline-disp');
+  if (sinceEl) {
+    if (tasiSincePct != null) {
+      const sign = tasiSincePct >= 0 ? '+' : '';
+      sinceEl.textContent = `${sign}${fmt(tasiSincePct, 2)}%`;
+      sinceEl.style.color = tasiSincePct >= 0 ? '#22c97a' : '#f0505a';
+      if (sinceDsp) sinceDsp.textContent = `من ${fmt(baseline)} نقطة`;
+    } else {
+      sinceEl.textContent = '—';
+      sinceEl.style.color = 'var(--text-3)';
+      if (sinceDsp) sinceDsp.textContent = baseline > 0 ? 'في انتظار سعر تاسي' : '← أدخل قيمة التأسيس';
+    }
+  }
+
+  const portEl = document.getElementById('portfolio-return-compare');
+  const portSub = document.getElementById('portfolio-return-sub');
+  if (portEl) {
+    if (portReturnPct != null) {
+      const sign = portReturnPct >= 0 ? '+' : '';
+      portEl.textContent = `${sign}${fmt(portReturnPct, 2)}%`;
+      portEl.style.color = portReturnPct >= 0 ? '#22c97a' : '#f0505a';
+    } else {
+      portEl.textContent = '—';
+      portEl.style.color = 'var(--text-3)';
+    }
+    if (portSub) portSub.textContent = totalCost > 0 ? `على ${fmt(totalCost)} ر.س` : 'لا توجد أسهم';
+  }
+
+  const alphaEl  = document.getElementById('alpha-val');
+  const alphaSub = document.getElementById('alpha-sub');
+  if (alphaEl) {
+    if (alpha != null) {
+      const sign = alpha >= 0 ? '+' : '';
+      alphaEl.textContent = `${sign}${fmt(alpha, 2)}%`;
+      alphaEl.style.color = alpha >= 0 ? '#22c97a' : '#f0505a';
+      if (alphaSub) {
+        alphaSub.textContent = alpha >= 0 ? '✅ تتفوق على تاسي' : '⚠️ أقل من تاسي';
+        alphaSub.style.color = alpha >= 0 ? '#22c97a' : '#f0505a';
+      }
+    } else {
+      alphaEl.textContent = '—';
+      alphaEl.style.color = 'var(--text-3)';
+      if (alphaSub) { alphaSub.textContent = 'أدخل بيانات المقارنة'; alphaSub.style.color = 'var(--text-3)'; }
+    }
+  }
+}
+
+// ========================================================
+//  REALIZED P&L SUMMARY + TRADE FILTER
+// ========================================================
+let _tradeTab = 'all'; // 'all' | 'win' | 'loss' | 'buy' | 'div'
+
+function setTradeTab(tab) {
+  _tradeTab = tab;
+  ['all','win','loss','buy','div'].forEach(t => {
+    const el = document.getElementById('ttab-' + t);
+    if (!el) return;
+    el.className = 'trade-tab';
+    if (t === tab) el.classList.add('active-' + (t === 'win' ? 'win' : t === 'loss' ? 'loss' : t === 'div' ? 'div' : 'all'));
+  });
+  renderTransactions();
+}
+
+function renderRealizedSummary() {
+  const sells = state.transactions.filter(t => t.type === 'sell' && t.pnl != null);
+  const wins  = sells.filter(t => t.pnl > 0);
+  const losses = sells.filter(t => t.pnl < 0);
+  const totalWin  = wins.reduce((s, t) => s + t.pnl, 0);
+  const totalLoss = losses.reduce((s, t) => s + t.pnl, 0);
+  const netPnl    = totalWin + totalLoss;
+  const totalInv  = sells.reduce((s, t) => s + (t.shares * (t.price - (state.holdings[t.symbol]?.avgCost || 0))), 0);
+  const winRate   = sells.length > 0 ? (wins.length / sells.length * 100) : null;
+  const avgPnl    = sells.length > 0 ? (netPnl / sells.length) : null;
+
+  const el = (id) => document.getElementById(id);
+  if (!el('rs-total-win')) return;
+
+  el('rs-total-win').textContent  = fmt(totalWin)  + ' ر.س';
+  el('rs-total-loss').textContent = fmt(totalLoss) + ' ر.س';
+  el('rs-win-count').textContent  = `${wins.length} صفقة`;
+  el('rs-loss-count').textContent = `${losses.length} صفقة`;
+
+  const netEl = el('rs-net-pnl');
+  if (netEl) {
+    netEl.textContent = (netPnl >= 0 ? '+' : '') + fmt(netPnl) + ' ر.س';
+    netEl.style.color = netPnl > 0 ? '#22c97a' : netPnl < 0 ? '#f0505a' : 'var(--text-2)';
+  }
+
+  // Net % based on total capital deployed in closed trades
+  const totalCapital = sells.reduce((s, t) => s + (t.shares * (t.price || 0)), 0);
+  const netPct = totalCapital > 0 ? (netPnl / totalCapital * 100) : null;
+  el('rs-net-pct').textContent = netPct != null ? `${netPct >= 0 ? '+' : ''}${fmt(netPct, 2)}% من رأس المال` : '—';
+
+  el('rs-win-rate').textContent  = winRate != null ? fmt(winRate, 1) + '%' : '—';
+  el('rs-trades-total').textContent = `${sells.length} صفقة مغلقة`;
+
+  const avgEl = el('rs-avg-pnl');
+  if (avgEl) {
+    avgEl.textContent = avgPnl != null ? (avgPnl >= 0 ? '+' : '') + fmt(avgPnl) + ' ر.س' : '—';
+    avgEl.style.color = avgPnl != null ? (avgPnl >= 0 ? '#4e9df0' : '#f0505a') : 'var(--text-2)';
+  }
+}
+
+// ========================================================
+//  SELL CALC — ENHANCED (adds pct + verdict)
+// ========================================================
+// Override original calcSellTotal
+function calcSellTotal() {
+  const sym = document.getElementById('sell-symbol').value;
+  const h = state.holdings[sym];
+  if (!h) return;
+  const shares     = parseFloat(document.getElementById('sell-shares').value) || 0;
+  const price      = parseFloat(document.getElementById('sell-price').value) || 0;
+  const commission = parseFloat(document.getElementById('sell-commission').value) || 0;
+  const net        = shares * price - commission;
+  const cost       = shares * h.avgCost;
+  const pnl        = net - cost;
+  const pnlPct     = cost > 0 ? (pnl / cost) * 100 : 0;
+
+  document.getElementById('sell-net').textContent = fmt(net) + ' ر.س';
+
+  const pnlEl = document.getElementById('sell-pnl');
+  pnlEl.textContent  = (pnl >= 0 ? '+' : '') + fmt(pnl) + ' ر.س';
+  pnlEl.style.color  = pnl >= 0 ? '#22c97a' : '#f0505a';
+  pnlEl.style.fontWeight = '700';
+
+  const pctEl = document.getElementById('sell-pnl-pct');
+  if (pctEl) {
+    pctEl.textContent = shares > 0 && price > 0 ? (pnlPct >= 0 ? '+' : '') + fmt(pnlPct, 2) + '%' : '—';
+    pctEl.style.color = pnl >= 0 ? '#22c97a' : '#f0505a';
+    pctEl.style.fontWeight = '700';
+  }
+
+  const verdict = document.getElementById('sell-verdict');
+  if (verdict && shares > 0 && price > 0) {
+    verdict.style.display = 'block';
+    if (pnl > 0) {
+      verdict.style.cssText = 'display:block;margin-top:.6rem;padding:.5rem .75rem;border-radius:7px;font-size:.82rem;font-weight:700;text-align:center;background:rgba(34,201,122,.12);color:#22c97a;border:1px solid rgba(34,201,122,.3)';
+      verdict.textContent = `🎉 صفقة رابحة — ربحت ${fmt(pnl)} ر.س (${fmt(pnlPct, 2)}%)`;
+    } else if (pnl < 0) {
+      verdict.style.cssText = 'display:block;margin-top:.6rem;padding:.5rem .75rem;border-radius:7px;font-size:.82rem;font-weight:700;text-align:center;background:rgba(240,80,90,.12);color:#f0505a;border:1px solid rgba(240,80,90,.3)';
+      verdict.textContent = `📉 صفقة خاسرة — خسرت ${fmt(Math.abs(pnl))} ر.س (${fmt(Math.abs(pnlPct), 2)}%)`;
+    } else {
+      verdict.style.cssText = 'display:block;margin-top:.6rem;padding:.5rem .75rem;border-radius:7px;font-size:.82rem;font-weight:700;text-align:center;background:var(--bg-elevated);color:var(--text-2);border:1px solid var(--border)';
+      verdict.textContent = '➖ تعادل — لا ربح ولا خسارة';
+    }
+  } else if (verdict) {
+    verdict.style.display = 'none';
+  }
+}
+
+// ========================================================
+//  INIT ADDITIONS
+// ========================================================
+function initTasiBaseline() {
+  const baseline = state.settings?.tasiBaseline || 0;
+  if (baseline > 0) {
+    const bi = document.getElementById('tasi-baseline-input');
+    const bs = document.getElementById('tasi-baseline-settings');
+    if (bi) bi.value = baseline;
+    if (bs) bs.value = baseline;
+  }
+}
+
+// ========================================================
 //  SETTINGS SYNC
 // ========================================================
 function syncSettingsUI() {
@@ -2874,13 +3417,22 @@ function syncSettingsUI() {
   loadState();
   loadSahmkKey();
   syncSettingsUI();
+  initTasiBaseline();
   document.getElementById('add-date').value = today();
   document.getElementById('sell-date').value = today();
   document.getElementById('div-exdate').value = today();
   document.getElementById('div-paydate').value = today();
   renderAll();
   const symbols = Object.keys(state.holdings).filter(s => state.holdings[s].shares > 0);
-  if (symbols.length > 0) setTimeout(() => refreshAllPrices(), 800);
+  if (symbols.length > 0) {
+    setTimeout(() => {
+      refreshAllPrices();
+      // Fetch TASI after stocks to avoid rate limit
+      setTimeout(() => fetchAndRenderTasi(), 3000);
+    }, 800);
+  } else if (sahmkApiKey) {
+    setTimeout(() => fetchAndRenderTasi(), 1500);
+  }
 })();
 </script>
 </body>
